@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6597a58ca63c41f2b4723d424a15fa48, type: 3}
+  m_Name: Test map 3
+  m_EditorClassIdentifier: 
+  Sprites:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 21300000, guid: aee326eb49a72194bbe2cd8ca9c01adc, type: 3}
+    - Key: 1
+      Value: {fileID: 21300000, guid: d883969a87312eb4b82a23777fe9e644, type: 3}
+    - Key: 2
+      Value: {fileID: 21300000, guid: e3305d99c737f92488d14a835a2d3d81, type: 3}
+    - Key: 3
+      Value: {fileID: 21300000, guid: e3305d99c737f92488d14a835a2d3d81, type: 3}
+  <Map>k__BackingField:
+    gridSize: {x: 7, y: 7}
+    cellSize: {x: 32, y: 16}
+    cells:
+    - row: 01000000010000000100000001000000010000000100000001000000
+    - row: 01000000020000000100000000000000000000000000000001000000
+    - row: 01000000000000000100000000000000010000000000000001000000
+    - row: 01000000000000000100000000000000010000000000000001000000
+    - row: 01000000000000000100000000000000010000000000000001000000
+    - row: 01000000000000000000000000000000010000000000000001000000
+    - row: 01000000010000000100000001000000010000000100000001000000

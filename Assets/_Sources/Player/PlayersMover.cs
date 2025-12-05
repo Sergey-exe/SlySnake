@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,15 +6,28 @@ using UnityEngine;
 public class PlayersMover : MonoBehaviour
 {
     [SerializeField] private PlayerWayBuilder _wayBuilder;
-    [SerializeField] private PlayersSpawner _playerSpawner;
-    [SerializeField] private MapSpawner _mapSpawner;
     [SerializeField] private float _duration;
-
+    
+    private PlayersTransformData _playersTransformData;
     private List<Coroutine> _moveCoroutines = new();
     private bool _isMoving;
+    
+    private bool _isInit;
+
+    public event Action<int, Transform> InPoint;
+        
+    public void Init(PlayersTransformData playersTransformData)
+    {
+        _playersTransformData = playersTransformData ?? throw new ArgumentNullException(nameof(playersTransformData));
+        
+        _isInit = true;
+    }
 
     public void TryStartMove(GameMapVector2 direction)
     {
+        if(!_isInit)
+            return;
+        
         if (_isMoving)
             return;
         
@@ -27,11 +41,11 @@ public class PlayersMover : MonoBehaviour
 
         _isMoving = true;
 
-        for (int i = 0; i < _playerSpawner.PlayersCount; i++)
+        for (int i = 0; i < _playersTransformData.PlayersCount; i++)
         {
-            List<Transform> waypoints = _wayBuilder.SearchWay(i, direction, _mapSpawner.SearchPlayer(i));
+            List<Transform> waypoints = _wayBuilder.SearchWay(i, direction);
             
-            var coroutine = StartCoroutine(MovePlayer(i, _playerSpawner.GetPlayerTransform(i), waypoints, _duration));
+            var coroutine = StartCoroutine(MovePlayer(i, _playersTransformData.GetTransform(i) , waypoints, _duration));
             
             _moveCoroutines.Add(coroutine);
         }
@@ -75,10 +89,8 @@ public class PlayersMover : MonoBehaviour
             }
 
             playerTransform.position = endPos;
-            _mapSpawner.ChangeItem(mapIndex, waypoints[currentWaypointIndex]);
+            InPoint?.Invoke(mapIndex, waypoints[currentWaypointIndex]);
             currentWaypointIndex++;
         }
-        
-        //_mapSpawner.
     }
 }

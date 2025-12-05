@@ -5,13 +5,22 @@ using UnityEngine;
 
 public class PlayerWayBuilder : MonoBehaviour
 {
-    [SerializeField] MapData _mapData;
-    [SerializeField] MapSpawner _mapSpawner;
-    
-    public List<Transform> SearchWay(int mapIndex, GameMapVector2 direction, GameMapVector2 playerPosition)
+    private List<Map> _maps = new();
+
+    public void SetMaps(List<Map> map)
     {
+        _maps = map ?? throw new ArgumentNullException(nameof(map));
+    }
+    
+    public List<Transform> SearchWay(int index, GameMapVector2 direction)
+    {
+        if(_maps.Count == 0)
+            throw new Exception("Карт для нахождения пути не существует!");
+        
         List<Transform> waypoints = new();
-        int[,] currentMap = _mapData.GetCurrentMap(mapIndex);
+        GameMapVector2 playerPosition = _maps[index].SearchPlayer();
+        
+        int[,] currentMap = _maps[index].GetCurrentMap();
 
         int x = playerPosition.X;
         int y = playerPosition.Y;
@@ -34,7 +43,7 @@ public class PlayerWayBuilder : MonoBehaviour
             if (currentMap[x, y] == (int)MapItemType.Empty)
             {
                 currentMap[x, y] = (int)MapItemType.TailPlayer;
-                waypoints.Add(_mapSpawner.GetItemTransform(mapIndex, y, x));
+                waypoints.Add(_maps[index].GetItemTransform(y, x));
             }
             else
             {
@@ -44,7 +53,7 @@ public class PlayerWayBuilder : MonoBehaviour
             }
         }
 
-        _mapData.SetCurrentMap(mapIndex, currentMap);
+        _maps[index].SetCurrentMap(currentMap);
         
         return waypoints;
     }

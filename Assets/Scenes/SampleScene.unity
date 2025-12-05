@@ -177,7 +177,6 @@ GameObject:
   m_Component:
   - component: {fileID: 286771973}
   - component: {fileID: 286771972}
-  - component: {fileID: 286771974}
   m_Layer: 0
   m_Name: MapSpawner
   m_TagString: Untagged
@@ -198,13 +197,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mapItemPrefab: {fileID: 175110260196331374, guid: 857dd95e7b23d1041b71629a4ad23870, type: 3}
+  _mapsCollector: {fileID: 777301286}
   _playersSpawner: {fileID: 271694648}
-  _mapData: {fileID: 286771974}
-  _spawnHub: {fileID: 777301286}
+  _wayBuilder: {fileID: 1593078255}
+  _mapItemChanger: {fileID: 777301287}
   _currentLevels:
   - {fileID: 11400000, guid: 038d5df5085d70e44b8098b66363bc72, type: 2}
   - {fileID: 11400000, guid: a9a44ef3f037d8d40936807ea1367aa8, type: 2}
   - {fileID: 11400000, guid: a2351147ee729c04d84677370f5bbc1a, type: 2}
+  - {fileID: 11400000, guid: 953299260260bb645a1b2a1d81ad9bc3, type: 2}
 --- !u!4 &286771973
 Transform:
   m_ObjectHideFlags: 0
@@ -220,18 +221,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &286771974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286771971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a09be2fad65341640b521f0e5acd0e12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,6 +347,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playersMover: {fileID: 1593078256}
   _playersSpawner: {fileID: 271694648}
+  _playerWayBuilder: {fileID: 1593078255}
   _mapSpawner: {fileID: 286771972}
   _inputReader: {fileID: 519420033}
   _cameraFocuser: {fileID: 519420035}
@@ -387,6 +377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 777301286}
+  - component: {fileID: 777301287}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -409,6 +400,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &777301287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 777301285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 004f751db6ea434fa843e7484d1a97e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playersMover: {fileID: 1593078256}
 --- !u!1 &1593078254
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,8 +443,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef0c1cd1181bbe489291943ebe9a3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapData: {fileID: 286771974}
-  _mapSpawner: {fileID: 286771972}
 --- !u!114 &1593078256
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,8 +456,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _wayBuilder: {fileID: 1593078255}
-  _playerSpawner: {fileID: 271694648}
-  _mapSpawner: {fileID: 286771972}
   _duration: 0.2
 --- !u!4 &1593078257
 Transform:

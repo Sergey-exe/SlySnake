@@ -35,7 +35,6 @@ namespace _Sources.Player
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    // Начинаем BFS только для ячеек с целью (TailPlayer) и ещё не посещённых
                     if (array[i, j] == (int)MapItemType.TailPlayer && !visited[i, j])
                     {
                         if (foundGroups >= playersCount)

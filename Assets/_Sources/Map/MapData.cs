@@ -1,23 +1,16 @@
 using System.Collections.Generic;
-using UnityEngine;
 
-public class MapData : MonoBehaviour
+public class MapData 
 {
-    private Dictionary<int, int[,]> _currentMaps = new();
+    private int[,] _currentMap;
 
-    public void SetCurrentMap(int index, int[,] map)
+    public void SetCurrentMap(int[,] map)
     {
-        if (_currentMaps.ContainsKey(index))
-        {
-            _currentMaps[index] = map;
-            return;
-        }
-        
-        _currentMaps.Add(index, map.Clone() as int[,]);
+        _currentMap = map.Clone() as int[,];
     }
 
-    public int[,] GetCurrentMap(int index)
+    public int[,] GetCurrentMap()
     {
-        return _currentMaps[index].Clone() as int[,];
+        return _currentMap.Clone() as int[,];
     }
 }

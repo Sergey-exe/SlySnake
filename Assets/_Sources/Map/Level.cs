@@ -9,5 +9,7 @@ public class Level : ScriptableObject
     [SerializedDictionary("Тип элемента", "Спрайт элемента")] 
     public SerializedDictionary<MapItemType, Sprite> Sprites;
 
+    [field: SerializeField] public string Name { get; private set; }
+    
     [field: SerializeField] public Array2DInt Map { get; private set; }
 }

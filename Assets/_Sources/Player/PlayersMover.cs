@@ -5,17 +5,19 @@ using UnityEngine;
 
 public class PlayersMover : MonoBehaviour
 {
-    [SerializeField] private PlayerWayBuilder _wayBuilder;
+    [SerializeField] private PlayersWayBuilder _wayBuilder;
     [SerializeField] private float _duration;
     
     private PlayersTransformData _playersTransformData;
     private List<Coroutine> _moveCoroutines = new();
+    private int _countMoving = 0;
     private bool _isMoving;
     
     private bool _isInit;
 
     public event Action<int, Transform> InPoint;
-        
+    public event Action PlayersFinished;
+    
     public void Init(PlayersTransformData playersTransformData)
     {
         _playersTransformData = playersTransformData ?? throw new ArgumentNullException(nameof(playersTransformData));
@@ -30,14 +32,10 @@ public class PlayersMover : MonoBehaviour
         
         if (_isMoving)
             return;
-        
-        foreach (var coroutine in _moveCoroutines)
-        {
-            if (coroutine != null)
-                StopCoroutine(coroutine);
-        }
-        
+
+        StopAllCoroutines();
         _moveCoroutines.Clear();
+        _countMoving = 0;
 
         _isMoving = true;
 
@@ -48,26 +46,26 @@ public class PlayersMover : MonoBehaviour
             var coroutine = StartCoroutine(MovePlayer(i, _playersTransformData.GetTransform(i) , waypoints, _duration));
             
             _moveCoroutines.Add(coroutine);
+            _countMoving++;
         }
-        
-        StartCoroutine(WaitForMovementEnd());
     }
 
-    private IEnumerator WaitForMovementEnd()
+    private void TryPlayersFinished()
     {
-        foreach (var corutine in _moveCoroutines)
-        {
-            if (corutine != null)
-                yield return corutine;
-        }
-
+        if (_countMoving > 0)
+            return;
+        
         _isMoving = false;
+        PlayersFinished?.Invoke();
     }
 
     private IEnumerator MovePlayer(int mapIndex, Transform playerTransform, List<Transform> waypoints, float duration)
     {
         if (waypoints == null || waypoints.Count == 0)
+        {
+            _countMoving--;
             yield break;
+        }
 
         int currentWaypointIndex = 0;
 
@@ -92,5 +90,8 @@ public class PlayersMover : MonoBehaviour
             InPoint?.Invoke(mapIndex, waypoints[currentWaypointIndex]);
             currentWaypointIndex++;
         }
+
+        _countMoving--;
+        TryPlayersFinished();
     }
 }

@@ -87,4 +87,15 @@ public class Map : MonoBehaviour
     {
         _mapData.SetCurrentMap(map);
     }
+
+    public bool HasEmptyItems()
+    {
+        foreach (var item in _items)
+        {
+            if(item.MapItemType == MapItemType.Empty)
+                return true;
+        }
+        
+        return false;
+    }
 }

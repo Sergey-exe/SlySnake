@@ -10,7 +10,8 @@ public class InputReader : MonoBehaviour
     
     [SerializeField] private PlayersMover _playersMover;
     
-    private int _step = 1;
+    private readonly int _step = 1;
+    
     private bool _isMobile;
     private bool _isActive;
 

@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Root : MonoBehaviour
 {
     [SerializeField] private PlayersMover _playersMover;
     [SerializeField] private PlayersSpawner _playersSpawner;
-    [SerializeField] private PlayerWayBuilder _playerWayBuilder;
+    [FormerlySerializedAs("_playerWayBuilder")] [SerializeField] private PlayersWayBuilder playersWayBuilder;
     [SerializeField] private MapSpawner _mapSpawner;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private CameraFocuser _cameraFocuser;

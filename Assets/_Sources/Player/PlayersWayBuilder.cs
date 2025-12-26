@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using _Sources.Map;
 using UnityEngine;
 
-public class PlayerWayBuilder : MonoBehaviour
+public class PlayersWayBuilder : MonoBehaviour
 {
     private List<Map> _maps = new();
 
@@ -56,5 +57,42 @@ public class PlayerWayBuilder : MonoBehaviour
         _maps[index].SetCurrentMap(currentMap);
         
         return waypoints;
+    }
+
+    public bool HasFreeWays()
+    {
+        for (int i = 0; i < _maps.Count; i++)
+        {
+            if(HasFreeWay(i) == false)
+                return false;
+        }
+        
+        return true;
+    }
+    private bool HasFreeWay(int index)
+    {
+        GameMapVector2 playerPosition = _maps[index].SearchPlayer();
+        int[,] map = _maps[index].GetCurrentMap();
+
+        int rows = map.GetLength(0);
+        int cols = map.GetLength(1);
+
+        (int deltaX, int deltaY)[] dirs =
+        {
+            (-1, 0), 
+            ( 1, 0), 
+            ( 0,-1), 
+            ( 0, 1)  
+        };
+
+        return dirs.Any(d =>
+        {
+            int x = playerPosition.X + d.deltaX;
+            int y = playerPosition.Y + d.deltaY;
+
+            return x >= 0 && x < rows &&
+                   y >= 0 && y < cols &&
+                   map[x, y] == 0;
+        });
     }
 }

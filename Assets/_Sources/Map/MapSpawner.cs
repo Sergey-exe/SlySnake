@@ -9,7 +9,7 @@ public class MapSpawner : MonoBehaviour
     [SerializeField] private GameObject _mapItemPrefab;
     [SerializeField] private Transform _mapsCollector;
     [SerializeField] private PlayersSpawner _playersSpawner;
-    [SerializeField] private PlayerWayBuilder _wayBuilder;
+    [SerializeField] private PlayersWayBuilder _wayBuilder;
     [SerializeField] private MapItemChanger _mapItemChanger;
     [SerializeField] private List<Level> _currentLevels;
     

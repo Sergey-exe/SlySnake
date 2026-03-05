@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _Sources.Map;
 using Array2DEditor;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MapSpawner : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MapSpawner : MonoBehaviour
     [SerializeField] private PlayersSpawner _playersSpawner;
     [SerializeField] private PlayersWayBuilder _wayBuilder;
     [SerializeField] private MapItemChanger _mapItemChanger;
+    [SerializeField] private MapsProgressCollection mapsProgressCollection;
     [SerializeField] private List<Level> _currentLevels;
     
     private Vector2 _tileSize;
@@ -93,6 +95,9 @@ public class MapSpawner : MonoBehaviour
         mapObject.name = level.Name;
         mapObject.transform.SetParent(_mapsCollector);
         Map map = mapObject.AddComponent<Map>();
+        MapProgressHandler mapProgressHandler = new(map);
+        mapsProgressCollection.AddHandler(mapProgressHandler);
+        
 
         for (int y = 0; y < height; y++)
         {

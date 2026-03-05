@@ -3,7 +3,7 @@
     public enum MapItemType
     {
         Empty,
-        Turf, 
+        Wall, 
         Player,
         TailPlayer,
         Water,

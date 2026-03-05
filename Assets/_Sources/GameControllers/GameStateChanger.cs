@@ -1,28 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameStateChanger : MonoBehaviour
 {
-    [SerializeField] private PlayersMover _playersMover;
-    [SerializeField] private PlayersWayBuilder _wayBuilder;
+    [SerializeField] private GameStateHandler _gameStateHandler;
+    [SerializeField] private EndGameTextSaver _endGameTextSaver;
 
     private void OnEnable()
     {
-        _playersMover.PlayersFinished += TryChangeState;
+        _gameStateHandler.IsVin += ChangeState;
     }
 
     private void OnDisable()
     {
-        _playersMover.PlayersFinished -= TryChangeState;
+        _gameStateHandler.IsVin -= ChangeState;
     }
 
-    private void TryChangeState()
+    private void ChangeState(bool isVin)
     {
-        if(_wayBuilder.HasFreeWays() == true)
-            return;
-        
-        //if()
+        if(isVin)
+            Debug.Log("Победа!");
+        else
+            Debug.Log($"Поражение! Игрок {_endGameTextSaver.GetText()}");
     }
 }

@@ -38,11 +38,10 @@ public class PlayersMover : MonoBehaviour
         _countMoving = 0;
 
         _isMoving = true;
-
+        
         for (int i = 0; i < _playersTransformData.PlayersCount; i++)
         {
             List<Transform> waypoints = _wayBuilder.SearchWay(i, direction);
-            
             var coroutine = StartCoroutine(MovePlayer(i, _playersTransformData.GetTransform(i) , waypoints, _duration));
             
             _moveCoroutines.Add(coroutine);
@@ -66,7 +65,7 @@ public class PlayersMover : MonoBehaviour
             _countMoving--;
             yield break;
         }
-
+    
         int currentWaypointIndex = 0;
 
         while (currentWaypointIndex < waypoints.Count)

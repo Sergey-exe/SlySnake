@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PlayersWayBuilder : MonoBehaviour
 {
+    [SerializeField] private MechanismsActivator _mechanismsActivator;
+    
     private List<Map> _maps = new();
 
     public void SetMaps(List<Map> map)
@@ -15,6 +17,8 @@ public class PlayersWayBuilder : MonoBehaviour
     
     public List<Transform> SearchWay(int index, GameMapVector2 direction)
     {
+        bool stopWay = false;
+        
         if(_maps.Count == 0)
             throw new Exception("Карт для нахождения пути не существует!");
         
@@ -34,28 +38,33 @@ public class PlayersWayBuilder : MonoBehaviour
         else if (direction.X != 0 & direction.Y == 0)
             wayLength = currentMap.GetLength(1) - (playerPosition.X + 1) * direction.X;
         else
-            throw new InvalidOperationException("Движение по двум осям одновременно недопустимо");
+            throw new InvalidOperationException("Движение по двум осям одновременно недопустимо!");
         
         for (int i = 0; i < wayLength; i++)
         {
             x += direction.X;
             y += direction.Y;
             
-            if (currentMap[x, y] == (int)MapItemType.Empty)
-            {
-                currentMap[x, y] = (int)MapItemType.TailPlayer;
-                waypoints.Add(_maps[index].GetItemTransform(y, x));
-            }
-            else
+            if (currentMap[x, y] == (int)MapItemType.Wall || currentMap[x, y] == (int)MapItemType.TailPlayer)
             {
                 currentMap[playerPosition.X, playerPosition.Y] = (int)MapItemType.TailPlayer;
                 currentMap[x - direction.X, y - direction.Y] = (int)MapItemType.Player;
                 break;
             }
+            else if(currentMap[x, y] == (int)MapItemType.Trap)
+            {
+                _mechanismsActivator.ActivateTrap();
+                stopWay = true;
+            }
+            
+            currentMap[x, y] = (int)MapItemType.TailPlayer;
+            waypoints.Add(_maps[index].GetItemTransform(y, x));
+            
+            if(stopWay)
+                break;
         }
 
         _maps[index].SetCurrentMap(currentMap);
-        
         return waypoints;
     }
 
@@ -63,12 +72,13 @@ public class PlayersWayBuilder : MonoBehaviour
     {
         for (int i = 0; i < _maps.Count; i++)
         {
-            if(HasFreeWay(i) == false)
-                return false;
+            if(HasFreeWay(i))
+                return true;
         }
         
-        return true;
+        return false;
     }
+    
     private bool HasFreeWay(int index)
     {
         GameMapVector2 playerPosition = _maps[index].SearchPlayer();

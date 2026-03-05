@@ -25,4 +25,9 @@ public class MapsProgressCollection : MonoBehaviour
         
         return false;
     }
+
+    public void Revert()
+    {
+        _mapsProgressHandlers.Clear();
+    }
 }

@@ -36,6 +36,7 @@ public class GameStateChanger : MonoBehaviour
         else
         {
             Debug.Log($"Поражение! Игрок {_endGameTextSaver.GetText()}");
+            Revert();
         }
     }
 
@@ -43,14 +44,16 @@ public class GameStateChanger : MonoBehaviour
     {
         _gameWinerer.CloseWine();
         _playersSpawner.Revert();
+        _gameStateHandler.Revert();
         _mapSpawner.RestartLevel();
         ChangePause();
     }
 
-    private void Next()
+    private void Next()//Очень условно, поэтому дубляж
     {
         _gameWinerer.CloseWine();
         _playersSpawner.Revert();
+        _gameStateHandler.Revert();
         _mapSpawner.NextLevel();
         ChangePause();
     }

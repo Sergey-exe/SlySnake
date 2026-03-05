@@ -14,4 +14,10 @@ public class Mechanism : MonoBehaviour
         _endGameTextSaver.SetText(_endText);
         IsActivate = true;
     }
+
+    public void Revert()
+    {
+        IsActivate = false;
+        _endGameTextSaver.SetText("");
+    }
 }

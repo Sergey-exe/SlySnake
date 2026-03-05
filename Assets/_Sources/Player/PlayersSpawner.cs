@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayersSpawner : MonoBehaviour
 {
     [SerializeField] private Player _prefab;
-    [SerializeField] private Player _player;
+    [SerializeField] private List<Player> _players;
     
     private PlayersTransformData _playersTransformData;
 
@@ -22,15 +24,21 @@ public class PlayersSpawner : MonoBehaviour
         if (!_isInit)
             throw new Exception($"Класс {nameof(PlayersSpawner)} не инициализирован!");
         
-        _player = Instantiate(_prefab, spawnPoint.position, spawnPoint.rotation);
+        Player player = Instantiate(_prefab, spawnPoint.position, spawnPoint.rotation);
         
-        _playersTransformData.SetTransform(mapIndex, _player.transform);
+        _playersTransformData.SetTransform(mapIndex, player.transform);
+        
+        _players.Add(player);
     }
 
     [ContextMenu(nameof(Revert))]
     public void Revert()
     {
         _playersTransformData.Revert();
-        Destroy(_player.gameObject);
+        
+        foreach (var player in _players)
+            Destroy(player.gameObject);
+        
+        _players.Clear();
     }
 }

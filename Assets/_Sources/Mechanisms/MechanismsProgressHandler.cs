@@ -18,4 +18,10 @@ public class MechanismsProgressHandler : MonoBehaviour
         
         return true;
     }
+
+    public void Revert()
+    {
+        foreach (var mechanism in _mechanisms)
+            mechanism.Revert();
+    }
 }

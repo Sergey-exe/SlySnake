@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 312992274950232076, guid: 854b3b8fb0855804592633388660195b, type: 3}
-  _player: {fileID: 0}
+  _players: []
 --- !u!4 &271694649
 Transform:
   m_ObjectHideFlags: 0
@@ -205,6 +205,7 @@ MonoBehaviour:
   mapsProgressCollection: {fileID: 777301288}
   _currentLevels:
   - {fileID: 11400000, guid: 038d5df5085d70e44b8098b66363bc72, type: 2}
+  - {fileID: 11400000, guid: 8fa39ff8947d021498b3d5f6499c820f, type: 2}
 --- !u!4 &286771973
 Transform:
   m_ObjectHideFlags: 0
@@ -358,7 +359,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.29806086, g: 0.46226418, b: 0.2769224, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

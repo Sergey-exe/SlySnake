@@ -39,4 +39,10 @@ public class GameStateHandler : MonoBehaviour
         
         IsVin?.Invoke(isVin);
     }
+    
+    public void Revert()
+    {
+        _mechanismsProgressHandler.Revert();
+        _mapsProgressCollection.Revert();
+    }
 }

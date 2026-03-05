@@ -40,4 +40,9 @@ public class MapItemChanger : MonoBehaviour
             }
         }
     }
+
+    public void Revert()
+    {
+        _maps.Clear();
+    }
 }

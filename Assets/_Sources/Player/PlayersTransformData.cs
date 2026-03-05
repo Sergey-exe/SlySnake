@@ -16,4 +16,9 @@ public class PlayersTransformData
     {
         return _players[index];
     }
+
+    public void Revert()
+    {
+        _players.Clear();
+    }
 }

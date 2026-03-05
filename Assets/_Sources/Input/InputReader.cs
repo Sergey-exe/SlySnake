@@ -35,6 +35,11 @@ public class InputReader : MonoBehaviour
     {
         _isActive = true;
     }
+
+    public void Deactivate()
+    {
+        _isActive = false;
+    }
     
     public bool DownButtonUp()
     {

@@ -14,6 +14,11 @@ public class PlayersWayBuilder : MonoBehaviour
     {
         _maps = map ?? throw new ArgumentNullException(nameof(map));
     }
+
+    public void Revert()
+    {
+        _maps.Clear();
+    }
     
     public List<Transform> SearchWay(int index, GameMapVector2 direction)
     {

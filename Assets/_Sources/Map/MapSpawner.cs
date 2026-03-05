@@ -15,6 +15,7 @@ public class MapSpawner : MonoBehaviour
     [SerializeField] private MapsProgressCollection mapsProgressCollection;
     [SerializeField] private List<Level> _currentLevels;
     
+    private int _currentLevelIndex = 0;
     private Vector2 _tileSize;
     private List<Map> _maps;
     private List<Rect> _placedRects = new(); 
@@ -29,11 +30,37 @@ public class MapSpawner : MonoBehaviour
         _isInit = true;
     }
 
+    [ContextMenu(nameof(Revert))]
+    public void Revert()
+    {
+        foreach (Transform child in _mapsCollector)
+            Destroy(child.gameObject);
+        
+        _mapItemChanger.Revert();
+        _wayBuilder.Revert();
+    }
+
+    public void RestartLevel()
+    {
+        Revert();
+        SpawnMap();
+    }
+
+    public void NextLevel()
+    {
+        Revert();
+        
+        //Логика перехода на другой уровень
+        
+        SpawnMap();
+    }
+
     public void SetLevels(List<Level> levels)
     {
         _currentLevels = levels ?? throw new ArgumentNullException(nameof(levels)); 
     }
     
+    [ContextMenu(nameof(SpawnMap))]
     public void SpawnMap()
     {
         if (_isInit == false)

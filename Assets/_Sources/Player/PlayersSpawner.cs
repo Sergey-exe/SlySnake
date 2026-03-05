@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayersSpawner : MonoBehaviour
 {
     [SerializeField] private Player _prefab;
+    [SerializeField] private Player _player;
     
     private PlayersTransformData _playersTransformData;
 
@@ -21,8 +22,15 @@ public class PlayersSpawner : MonoBehaviour
         if (!_isInit)
             throw new Exception($"Класс {nameof(PlayersSpawner)} не инициализирован!");
         
-        Player player = Instantiate(_prefab, spawnPoint.position, spawnPoint.rotation);
+        _player = Instantiate(_prefab, spawnPoint.position, spawnPoint.rotation);
         
-        _playersTransformData.SetTransform(mapIndex, player.transform);
+        _playersTransformData.SetTransform(mapIndex, _player.transform);
+    }
+
+    [ContextMenu(nameof(Revert))]
+    public void Revert()
+    {
+        _playersTransformData.Revert();
+        Destroy(_player.gameObject);
     }
 }

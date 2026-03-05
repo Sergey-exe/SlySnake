@@ -87,6 +87,4 @@ public class Map : MonoBehaviour
     {
         _mapData.SetCurrentMap(map);
     }
-
-
 }

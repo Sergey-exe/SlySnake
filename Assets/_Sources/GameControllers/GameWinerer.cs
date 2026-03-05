@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class GameWinerer : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject _endWindow;
+    
+    public void ShowWine()
     {
-        
+        _endWindow.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CloseWine()
     {
-        
+        _endWindow.SetActive(false);
     }
 }

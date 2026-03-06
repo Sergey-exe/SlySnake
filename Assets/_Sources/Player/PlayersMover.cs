@@ -63,6 +63,7 @@ public class PlayersMover : MonoBehaviour
         if (waypoints == null || waypoints.Count == 0)
         {
             _countMoving--;
+            TryPlayersFinished();
             yield break;
         }
     

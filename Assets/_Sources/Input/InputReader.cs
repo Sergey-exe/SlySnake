@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +6,6 @@ public class InputReader : MonoBehaviour
     [SerializeField] private PlayersMover _playersMover;
     
     private PlayerInput _playerInput;
-    
-    private bool _isMobile;
     
     public void Init()
     {

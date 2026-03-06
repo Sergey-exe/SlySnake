@@ -18,6 +18,7 @@ public class Root : MonoBehaviour
         _mapSpawner.Init(mapData);
         _playersSpawner.Init(playersTransformData);
         _playersMover.Init(playersTransformData);
+        _inputReader.Init();
         
         _mapSpawner.Spawned += _cameraFocuser.FocusCameraOnItems;
         _mapSpawner.SpawnMap();

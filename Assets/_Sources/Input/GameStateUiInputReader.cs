@@ -34,12 +34,6 @@ public class GameStateUiInputReader : MonoBehaviour
 
     private void Restart()
     {
-        // _mapSpawner.Revert();
-        // _playersSpawner.Revert();
-        //
-        // _mapSpawner.SpawnMap();
-        //
-        // _gameWinerer.CloseWine();
         IsRestart?.Invoke();
     }
 

@@ -178,6 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 286771973}
   - component: {fileID: 286771972}
+  - component: {fileID: 286771974}
   m_Layer: 0
   m_Name: MapSpawner
   m_TagString: Untagged
@@ -206,6 +207,7 @@ MonoBehaviour:
   _currentLevels:
   - {fileID: 11400000, guid: 038d5df5085d70e44b8098b66363bc72, type: 2}
   - {fileID: 11400000, guid: 8fa39ff8947d021498b3d5f6499c820f, type: 2}
+  _spriteSetsData: {fileID: 286771974}
 --- !u!4 &286771973
 Transform:
   m_ObjectHideFlags: 0
@@ -221,6 +223,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &286771974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286771971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79f695bc430996e43890d31a7067ba08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SpriteSets:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 11400000, guid: 4f036262d82e5b74aa72e0149b765f20, type: 2}
 --- !u!1 &402867956
 GameObject:
   m_ObjectHideFlags: 0

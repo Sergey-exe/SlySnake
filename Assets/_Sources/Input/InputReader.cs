@@ -1,68 +1,35 @@
+using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputReader : MonoBehaviour
 {
-    [SerializeField] private KeyCode[] _keysUp;
-    [SerializeField] private KeyCode[] _keysDown;
-    [SerializeField] private KeyCode[] _keysRight;
-    [SerializeField] private KeyCode[] _keysLeft;
-    
     [SerializeField] private PlayersMover _playersMover;
     
-    private readonly int _step = 1;
+    private PlayerInput _playerInput;
     
     private bool _isMobile;
-    private bool _isActive;
-
-    private void Update()
-    {
-        if(_isActive == false)
-            return;
-
-        if(DownButtonUp())
-            _playersMover.TryStartMove(new GameMapVector2(-_step, 0));
-        else if(DownButtonDown())
-            _playersMover.TryStartMove(new GameMapVector2(_step, 0));
-        else if(DownButtonRight())
-            _playersMover.TryStartMove(new GameMapVector2(0, _step));
-        else if(DownButtonLeft())
-            _playersMover.TryStartMove(new GameMapVector2(0, -_step));
-    }
     
+    public void Init()
+    {
+        _playerInput = new PlayerInput();
+        _playerInput.Player.Move.performed += OnMove;
+    }
     
     public void Activate()
     {
-        _isActive = true;
+        _playerInput.Enable();
     }
 
     public void Deactivate()
     {
-        _isActive = false;
-    }
-    
-    public bool DownButtonUp()
-    {
-        return DownButton(_keysUp);
+        _playerInput.Disable();
     }
 
-    public bool DownButtonDown()
+    private void OnMove(InputAction.CallbackContext context)
     {
-        return DownButton(_keysDown);
-    }
-
-    public bool DownButtonRight()
-    {
-        return DownButton(_keysRight);
-    }
-
-    public bool DownButtonLeft()
-    {
-        return DownButton(_keysLeft);
-    }
-    
-    private bool DownButton(KeyCode[] keyCodes)
-    {
-        return keyCodes.Any(keyCode => Input.GetKeyDown(keyCode));
+        Vector2 moveDirection = context.action.ReadValue<Vector2>();
+        _playersMover.TryStartMove(new GameMapVector2(-(int)moveDirection.y, (int)moveDirection.x));
     }
 }

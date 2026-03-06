@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using _Sources.Map;
 using UnityEngine;
 
-public class Map : MonoBehaviour
+public class Map 
 {
     private Level _currentLevel;
     private List<MapItem> _items;

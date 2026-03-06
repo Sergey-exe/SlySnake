@@ -121,7 +121,7 @@ public class MapSpawner : MonoBehaviour
         GameObject mapObject = new GameObject();
         mapObject.name = level.Name;
         mapObject.transform.SetParent(_mapsCollector);
-        Map map = mapObject.AddComponent<Map>();
+        Map map = new Map();
         MapProgressHandler mapProgressHandler = new(map);
         mapsProgressCollection.AddHandler(mapProgressHandler);
         
@@ -134,7 +134,7 @@ public class MapSpawner : MonoBehaviour
                 Sprite sprite = level.Sprites[(MapItemType)tileType];
 
                 
-                var newTile = Instantiate(_mapItemPrefab, map.transform);
+                var newTile = Instantiate(_mapItemPrefab, mapObject.transform);
                 newTile.name = $"Tile_{x}_{y}";
 
                 Vector3 tilePosition = position + new Vector3(x * _tileSize.x, (height - y - 1) * _tileSize.y, 0);

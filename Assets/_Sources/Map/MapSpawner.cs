@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Sources.Map;
 using Array2DEditor;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,6 +15,7 @@ public class MapSpawner : MonoBehaviour
     [SerializeField] private MapItemChanger _mapItemChanger;
     [SerializeField] private MapsProgressCollection mapsProgressCollection;
     [SerializeField] private List<Level> _currentLevels;
+    [SerializeField] private SpriteSetsData _spriteSetsData;
     
     private int _currentLevelIndex = 0;
     private Vector2 _tileSize;
@@ -125,14 +127,12 @@ public class MapSpawner : MonoBehaviour
         MapProgressHandler mapProgressHandler = new(map);
         mapsProgressCollection.AddHandler(mapProgressHandler);
         
-
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
                 int tileType = levelMap.GetCell(x, y);
-                Sprite sprite = level.Sprites[(MapItemType)tileType];
-
+                Sprite sprite = _spriteSetsData.SpriteSets[level.Type].Sprites[(MapItemType)tileType];
                 
                 var newTile = Instantiate(_mapItemPrefab, mapObject.transform);
                 newTile.name = $"Tile_{x}_{y}";
@@ -159,7 +159,7 @@ public class MapSpawner : MonoBehaviour
             }
         }
         
-        map.Init(mapItems, _currentLevels[newMapIndex], mapData, newMapIndex);
+        map.Init(mapItems, _currentLevels[newMapIndex], mapData, _spriteSetsData, newMapIndex);
         _maps.Add(map);
     }
 

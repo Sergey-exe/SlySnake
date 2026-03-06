@@ -3,11 +3,10 @@ using Array2DEditor;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Mew level", menuName = "Maps/Crete new level", order = 51)]
+[CreateAssetMenu(fileName = "New level", menuName = "Maps/Create new level", order = 51)]
 public class Level : ScriptableObject
 {
-    [SerializedDictionary("Тип элемента", "Спрайт элемента")] 
-    public SerializedDictionary<MapItemType, Sprite> Sprites;
+    [field: SerializeField] public SpriteSetType Type { get; private set; }
 
     [field: SerializeField] public string Name { get; private set; }
     

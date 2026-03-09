@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private MenuEntryPoint _menuEntryPoint;
+    [SerializeField] private LevelEntryPoint _levelEntryPoint;
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        _menuEntryPoint.Init();
+        _levelEntryPoint.Init();
     }
 }

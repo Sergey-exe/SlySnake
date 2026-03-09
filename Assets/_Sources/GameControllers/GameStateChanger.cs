@@ -8,8 +8,8 @@ public class GameStateChanger : MonoBehaviour
     [SerializeField] private GameWinerer _gameWinerer;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameStateUiInputReader _gameUiInputReader;
-    [SerializeField] private MapSpawner _mapSpawner;
-    [SerializeField] private PlayersSpawner _playersSpawner;
+    [SerializeField] private LevelStateChanger _levelStateChanger;
+    [SerializeField] private StartLevelUI _startLevelUI;
     
     private bool _isPaused = false;
     
@@ -18,11 +18,36 @@ public class GameStateChanger : MonoBehaviour
         _gameStateHandler.IsVin += ChangeState;
         _gameUiInputReader.IsRestart +=  Revert;
         _gameUiInputReader.IsNextLevel += Next;
+        _startLevelUI.OnStart += Launch;
     }
 
     private void OnDisable()
     {
         _gameStateHandler.IsVin -= ChangeState;
+        _gameUiInputReader.IsRestart -= Revert;
+        _gameUiInputReader.IsNextLevel -= Next;
+        _startLevelUI.OnStart -= Launch;
+    }
+
+    public void Launch()
+    {
+        _levelStateChanger.Launch();
+        _inputReader.Activate();
+    }
+
+    private void Revert()
+    {
+        _gameStateHandler.Revert();
+        _levelStateChanger.Restart();
+        _gameWinerer.CloseWine();
+        ChangePause();
+    }
+
+    private void Next()
+    {
+        _levelStateChanger.Next();
+        _gameWinerer.CloseWine();
+        ChangePause();
     }
 
     private void ChangeState(bool isVin)
@@ -39,25 +64,6 @@ public class GameStateChanger : MonoBehaviour
             Debug.Log($"Поражение! Игрок {_endGameTextSaver.GetText()}");
             Revert();
         }
-    }
-
-    private void Revert()
-    {
-        _gameWinerer.CloseWine();
-        _playersSpawner.Revert();
-        _gameStateHandler.Revert();
-        _mapSpawner.RestartLevel();
-        ChangePause();
-    }
-
-    private void Next()//Очень условно, поэтому дубляж
-    {
-        _gameWinerer.CloseWine();
-        _playersSpawner.Revert();
-        _gameStateHandler.Revert();
-
-        _mapSpawner.NextLevel();
-        ChangePause();
     }
 
     private void ChangePause()

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using _Sources.LoadingStepByStep;
 using UnityEngine;
 
-public class BoostrapRoot : MonoBehaviour
+public class BoostrapEntryPoint : MonoBehaviour
 {
     private async void Start()
     {

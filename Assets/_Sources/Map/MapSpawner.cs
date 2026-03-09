@@ -14,7 +14,7 @@ public class MapSpawner : MonoBehaviour
     [SerializeField] private PlayersWayBuilder _wayBuilder;
     [SerializeField] private MapItemChanger _mapItemChanger;
     [SerializeField] private MapsProgressCollection mapsProgressCollection;
-    [SerializeField] private List<Level> _currentLevels;
+    [SerializeField] private AllLevels _levels;
     [SerializeField] private SpriteSetsData _spriteSetsData;
     
     private int _currentLevelIndex = 0;
@@ -32,16 +32,6 @@ public class MapSpawner : MonoBehaviour
         _isInit = true;
     }
 
-    [ContextMenu(nameof(Revert))]
-    public void Revert()
-    {
-        foreach (Transform child in _mapsCollector)
-            Destroy(child.gameObject);
-        
-        _mapItemChanger.Revert();
-        _wayBuilder.Revert();
-    }
-
     public void RestartLevel()
     {
         Revert();
@@ -50,16 +40,9 @@ public class MapSpawner : MonoBehaviour
 
     public void NextLevel()
     {
-        Revert();
+        _currentLevelIndex = (_currentLevelIndex + 1) % _levels.CountLevels;
         
-        //Логика перехода на другой уровень
-        
-        SpawnMap();
-    }
-
-    public void SetLevels(List<Level> levels)
-    {
-        _currentLevels = levels ?? throw new ArgumentNullException(nameof(levels)); 
+        RestartLevel();
     }
     
     [ContextMenu(nameof(SpawnMap))]
@@ -71,25 +54,26 @@ public class MapSpawner : MonoBehaviour
             return;
         }
         
-        if (_currentLevels == null || _currentLevels.Count == 0)
-            throw new ArgumentNullException(nameof(_currentLevels));
+        if (_levels == null || _levels.CountLevels == 0)
+            throw new ArgumentNullException(nameof(_levels));
 
         int newMapIndex = 0;
         
         _placedRects.Clear();
 
-        Level firstLevel = _currentLevels[0];
-        SpawnLevelAtPosition(newMapIndex, firstLevel, Vector3.zero);
-        AddRectForLevel(firstLevel, Vector3.zero);
+        List<Maze> mazes = _levels.GetLevel(_currentLevelIndex).GetLevels();
+        Maze firstMaze = mazes[0];
+        SpawnLevelAtPosition(newMapIndex, firstMaze, Vector3.zero);
+        AddRectForLevel(firstMaze, Vector3.zero);
         newMapIndex++;
         
-        for (int i = 1; i < _currentLevels.Count; i++)
+        for (int i = 1; i < mazes.Count; i++)
         {
-            Level level = _currentLevels[i];
-            Vector2 size = GetLevelSizeInUnits(level);
+            Maze maze = mazes[i];
+            Vector2 size = GetLevelSizeInUnits(maze);
             Vector3 position = FindClosestFitPosition(size);
-            SpawnLevelAtPosition(newMapIndex, level, position);
-            AddRectForLevel(level, position);
+            SpawnLevelAtPosition(newMapIndex, maze, position);
+            AddRectForLevel(maze, position);
             newMapIndex++;
         }
 
@@ -98,18 +82,18 @@ public class MapSpawner : MonoBehaviour
         _mapItemChanger.SetMaps(_maps);
     }
 
-    private Vector2 GetLevelSizeInUnits(Level level)
+    private Vector2 GetLevelSizeInUnits(Maze maze)
     {
-        int width = level.Map.GridSize.x;
-        int height = level.Map.GridSize.y;
+        int width = maze.Map.GridSize.x;
+        int height = maze.Map.GridSize.y;
 
         return new Vector2(width * _tileSize.x, height * _tileSize.y);
     }
     
-    private void SpawnLevelAtPosition(int newMapIndex, Level level, Vector3 position)
+    private void SpawnLevelAtPosition(int newMapIndex, Maze maze, Vector3 position)
     {
         List<MapItem> mapItems = new();
-        Array2DInt levelMap = level.Map;
+        Array2DInt levelMap = maze.Map;
 
         MapData mapData = new MapData();
         
@@ -121,7 +105,7 @@ public class MapSpawner : MonoBehaviour
         Player player = null;
 
         GameObject mapObject = new GameObject();
-        mapObject.name = level.Name;
+        mapObject.name = maze.Name;
         mapObject.transform.SetParent(_mapsCollector);
         Map map = new Map();
         MapProgressHandler mapProgressHandler = new(map);
@@ -132,7 +116,7 @@ public class MapSpawner : MonoBehaviour
             for (int x = 0; x < width; x++)
             {
                 int tileType = levelMap.GetCell(x, y);
-                Sprite sprite = _spriteSetsData.SpriteSets[level.Type].Sprites[(MapItemType)tileType];
+                Sprite sprite = _spriteSetsData.SpriteSets[maze.Type].Sprites[(MapItemType)tileType];
                 
                 var newTile = Instantiate(_mapItemPrefab, mapObject.transform);
                 newTile.name = $"Tile_{x}_{y}";
@@ -159,14 +143,24 @@ public class MapSpawner : MonoBehaviour
             }
         }
         
-        map.Init(mapItems, _currentLevels[newMapIndex], mapData, _spriteSetsData, newMapIndex);
+        map.Init(mapItems, maze.Type, mapData, _spriteSetsData, newMapIndex);
         _maps.Add(map);
     }
-
-    private void AddRectForLevel(Level level, Vector3 position)
+    
+    [ContextMenu(nameof(Revert))]
+    private void Revert()
     {
-        int width = level.Map.GridSize.x;
-        int height = level.Map.GridSize.y;
+        foreach (Transform child in _mapsCollector)
+            Destroy(child.gameObject);
+        
+        _mapItemChanger.Revert();
+        _wayBuilder.Revert();
+    }
+
+    private void AddRectForLevel(Maze maze, Vector3 position)
+    {
+        int width = maze.Map.GridSize.x;
+        int height = maze.Map.GridSize.y;
         Vector2 size = new Vector2(width * _tileSize.x, height * _tileSize.y);
         
         Rect rect = new Rect(

@@ -1,14 +1,15 @@
-using _Sources.Map;
-using Array2DEditor;
-using AYellowpaper.SerializedCollections;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New level", menuName = "Maps/Create new level", order = 51)]
 public class Level : ScriptableObject
 {
-    [field: SerializeField] public SpriteSetType Type { get; private set; }
+    [SerializeField] private LevelOpeningType  _openingType;
+    [SerializeField] private List<Maze> _levels;
 
-    [field: SerializeField] public string Name { get; private set; }
-    
-    [field: SerializeField] public Array2DInt Map { get; private set; }
+    public List<Maze> GetLevels()
+    {
+        return _levels;
+    }
 }

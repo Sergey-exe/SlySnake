@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class GameStateChanger : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class GameStateChanger : MonoBehaviour
         _gameWinerer.CloseWine();
         _playersSpawner.Revert();
         _gameStateHandler.Revert();
+
         _mapSpawner.NextLevel();
         ChangePause();
     }

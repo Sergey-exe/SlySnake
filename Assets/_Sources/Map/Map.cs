@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Map 
 {
-    private Level _currentLevel;
+    private SpriteSetType _spriteSetType;
     private List<MapItem> _items;
     private MapData _mapData;
     private bool _isInit;
@@ -13,14 +13,14 @@ public class Map
     
     public int Index { get; private set; }
 
-    public void Init(List<MapItem> items, Level level, MapData mapData, SpriteSetsData spriteSetsData, int index)
+    public void Init(List<MapItem> items, SpriteSetType spriteSetType, MapData mapData, SpriteSetsData spriteSetsData, int index)
     {
         if(index < 0)
             throw new IndexOutOfRangeException(nameof(index));
         
         Index = index;
+        _spriteSetType = spriteSetType;
         _items = items ?? throw new ArgumentNullException(nameof(items));
-        _currentLevel = level ?? throw new ArgumentNullException(nameof(level));
         _mapData = mapData ?? throw new ArgumentNullException(nameof(mapData));
         _spriteSetsData = spriteSetsData ?? throw new ArgumentNullException(nameof(spriteSetsData));
         _isInit = true;
@@ -49,7 +49,7 @@ public class Map
                 $"Это может быть вызвано не правильным Transform, или же компонент {nameof(SpriteRenderer)} остутствует на тайле.");
         
         mapItem.SetType(MapItemType.TailPlayer);
-        spriteRenderer.sprite = _spriteSetsData.SpriteSets[_currentLevel.Type].Sprites[MapItemType.TailPlayer];
+        spriteRenderer.sprite = _spriteSetsData.SpriteSets[_spriteSetType].Sprites[MapItemType.TailPlayer];
     }
     
     public GameMapVector2 SearchPlayer()

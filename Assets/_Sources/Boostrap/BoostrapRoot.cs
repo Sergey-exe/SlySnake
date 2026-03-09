@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using _Sources.LoadingStepByStep;
 using UnityEngine;

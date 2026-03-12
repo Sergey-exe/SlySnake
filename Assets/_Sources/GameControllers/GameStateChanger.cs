@@ -5,7 +5,8 @@ public class GameStateChanger : MonoBehaviour
 {
     [SerializeField] private GameStateHandler _gameStateHandler;
     [SerializeField] private EndGameTextSaver _endGameTextSaver;
-    [SerializeField] private GameWinerer _gameWinerer;
+    [SerializeField] private GameWineUI _gameWineUI;
+    [SerializeField] private GameOverUI _gameOwerUI;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameStateUiInputReader _gameUiInputReader;
     [SerializeField] private LevelStateChanger _levelStateChanger;
@@ -16,7 +17,7 @@ public class GameStateChanger : MonoBehaviour
     private void OnEnable()
     {
         _gameStateHandler.IsVin += ChangeState;
-        _gameUiInputReader.IsRestart +=  Revert;
+        _gameUiInputReader.IsRestart += Revert;
         _gameUiInputReader.IsNextLevel += Next;
         _startLevelUI.OnStart += Launch;
     }
@@ -39,14 +40,16 @@ public class GameStateChanger : MonoBehaviour
     {
         _gameStateHandler.Revert();
         _levelStateChanger.Restart();
-        _gameWinerer.CloseWine();
+        _gameWineUI.CloseWine();
+        _gameOwerUI.CloseLose();
         ChangePause();
     }
 
     private void Next()
     {
         _levelStateChanger.Next();
-        _gameWinerer.CloseWine();
+        _gameWineUI.CloseWine();
+        _gameOwerUI.CloseLose();
         ChangePause();
     }
 
@@ -57,12 +60,12 @@ public class GameStateChanger : MonoBehaviour
         if (isVin)
         {
            Debug.Log("Победа!"); 
-           _gameWinerer.ShowWine();
+           _gameWineUI.ShowWine();
         }
         else
         {
             Debug.Log($"Поражение! Игрок {_endGameTextSaver.GetText()}");
-            Revert();
+            _gameOwerUI.ShowLose();
         }
     }
 

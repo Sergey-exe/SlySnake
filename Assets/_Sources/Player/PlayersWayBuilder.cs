@@ -43,7 +43,7 @@ public class PlayersWayBuilder : MonoBehaviour
         else if (direction.X != 0 & direction.Y == 0)
             wayLength = currentMap.GetLength(1) - (playerPosition.X + 1) * direction.X;
         else
-            throw new InvalidOperationException("Движение по двум осям одновременно недопустимо!");
+            return null;
         
         for (int i = 0; i < wayLength; i++)
         {

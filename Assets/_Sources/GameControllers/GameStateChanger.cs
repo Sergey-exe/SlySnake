@@ -1,3 +1,4 @@
+using _Sources.Model;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,6 +12,8 @@ public class GameStateChanger : MonoBehaviour
     [SerializeField] private GameStateUiInputReader _gameUiInputReader;
     [SerializeField] private LevelStateChanger _levelStateChanger;
     [SerializeField] private StartLevelUI _startLevelUI;
+    [SerializeField] private LevelTimeViewer _levelTimeViewer;
+    [SerializeField] private LevelTimeCounter _levelTimeCounter;
     
     private bool _isPaused = false;
     
@@ -34,6 +37,8 @@ public class GameStateChanger : MonoBehaviour
     {
         _levelStateChanger.Launch();
         _inputReader.Activate();
+        _levelTimeViewer.ShowTimers();
+        _levelTimeCounter.StartCounting();
     }
 
     private void Revert()
@@ -42,6 +47,7 @@ public class GameStateChanger : MonoBehaviour
         _levelStateChanger.Restart();
         _gameWineUI.CloseWine();
         _gameOwerUI.CloseLose();
+        _levelTimeCounter.Revert();
         ChangePause();
     }
 
@@ -50,12 +56,14 @@ public class GameStateChanger : MonoBehaviour
         _levelStateChanger.Next();
         _gameWineUI.CloseWine();
         _gameOwerUI.CloseLose();
+        _levelTimeCounter.Revert();
         ChangePause();
     }
 
     private void ChangeState(bool isVin)
     {
         ChangePause();
+        _levelTimeViewer.HideTimers();
         
         if (isVin)
         {
@@ -75,11 +83,13 @@ public class GameStateChanger : MonoBehaviour
         {
             _isPaused = false;
             _inputReader.Activate();
+            _levelTimeCounter.StartCounting();
         }
         else
         {
             _isPaused = true;
             _inputReader.Deactivate();
+            _levelTimeCounter.StopCounting();
         }
     }
 }

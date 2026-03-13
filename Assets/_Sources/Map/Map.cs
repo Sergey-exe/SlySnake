@@ -8,7 +8,6 @@ public class Map
     private SpriteSetType _spriteSetType;
     private List<MapItem> _items;
     private MapData _mapData;
-    private bool _isInit;
     private SpriteSetsData _spriteSetsData;
     
     public int Index { get; private set; }
@@ -23,7 +22,6 @@ public class Map
         _items = items ?? throw new ArgumentNullException(nameof(items));
         _mapData = mapData ?? throw new ArgumentNullException(nameof(mapData));
         _spriteSetsData = spriteSetsData ?? throw new ArgumentNullException(nameof(spriteSetsData));
-        _isInit = true;
     }
     
     public Transform GetItemTransform(int x, int y)

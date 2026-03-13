@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: 1
   m_EditorClassIdentifier: 
   _openingType: 0
-  _levels:
+  _mazes:
   - {fileID: 11400000, guid: 038d5df5085d70e44b8098b66363bc72, type: 2}

@@ -1,14 +1,15 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 namespace _Sources.Model
 {
     public class LevelTimeCounter : MonoBehaviour
     {
+        [SerializeField] private LevelTimeViewer _levelTimeViewer;
         [SerializeField] private float _timeStep;
-    
-        private LevelTimeViewer _levelTimeViewer;
+        
         private Coroutine _timeCoroutine;
         private WaitForSeconds _waitForSeconds;
         private bool _isInit;
@@ -16,9 +17,8 @@ namespace _Sources.Model
     
         public float GameTime { get; private set; }
 
-        public void Init(LevelTimeViewer levelTimeViewer)
+        public void Init()
         {
-            _levelTimeViewer = levelTimeViewer ?? throw new ArgumentNullException(nameof(levelTimeViewer));
             _waitForSeconds = new WaitForSeconds(_timeStep);
             
             _isInit = true;
@@ -50,6 +50,7 @@ namespace _Sources.Model
                 StopCoroutine(_timeCoroutine);
             
             _timeCoroutine = null;
+            Debug.Log("StopCounting");
         }
 
         public void Revert()

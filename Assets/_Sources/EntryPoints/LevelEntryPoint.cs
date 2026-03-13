@@ -1,3 +1,4 @@
+using _Sources.Model;
 using UnityEngine;
 
 public class LevelEntryPoint : MonoBehaviour
@@ -8,6 +9,7 @@ public class LevelEntryPoint : MonoBehaviour
     [SerializeField] private MapSpawner _mapSpawner;
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private CameraFocuser _cameraFocuser;
+    [SerializeField] private LevelTimeCounter _levelTimeCounter;
     
     public void Init()
     {
@@ -18,6 +20,8 @@ public class LevelEntryPoint : MonoBehaviour
         _playersSpawner.Init(playersTransformData);
         _playersMover.Init(playersTransformData);
         _inputReader.Init();
+        _levelTimeCounter.Init();
+        _levelTimeCounter.Activate();
         _mapSpawner.Spawned += _cameraFocuser.FocusCameraOnItems;
     }
 }

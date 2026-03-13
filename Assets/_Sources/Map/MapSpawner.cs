@@ -102,8 +102,6 @@ public class MapSpawner : MonoBehaviour
         int width = levelMap.GridSize.x;
         int height = levelMap.GridSize.y;
 
-        Player player = null;
-
         GameObject mapObject = new GameObject();
         mapObject.name = maze.Name;
         mapObject.transform.SetParent(_mapsCollector);

@@ -6,13 +6,7 @@ public class LevelTimeViewer : MonoBehaviour
     private const float SecondsInMinutes = 60;
     
     [SerializeField] private TextMeshProUGUI[] _timeTexts;
-    
-    private bool _iaActivate;
-    
-    public void Activate()
-    {
-        _iaActivate = true;
-    }
+    [SerializeField] private GameObject[] _timers;
     
     public void ShowTime(float currentTimeSeconds)
     {
@@ -25,5 +19,17 @@ public class LevelTimeViewer : MonoBehaviour
         {
             text.text = formattedTime;
         }
+    }
+
+    public void ShowTimers()
+    {
+        foreach (var timer in _timers)
+            timer.SetActive(true);
+    }
+
+    public void HideTimers()
+    {
+        foreach (var timer in _timers)
+            timer.SetActive(false);
     }
 }

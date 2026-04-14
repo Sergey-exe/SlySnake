@@ -8,8 +8,10 @@ public class Level : ScriptableObject
 {
     [SerializeField] private LevelOpeningType  _openingType;
     [SerializeField] private List<Maze> _mazes;
+    
+    public LevelOpeningType OpeningType => _openingType;
 
-    public List<Maze> GetLevels()
+    public List<Maze> GetMazes()
     {
         return _mazes;
     }

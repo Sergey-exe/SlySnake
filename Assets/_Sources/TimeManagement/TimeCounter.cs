@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
+using _Sources.TimeManagement;
 using TMPro;
 using UnityEngine;
 
-namespace _Sources.Model
+namespace _Sources.TimeManagement
 {
     public class LevelTimeCounter : MonoBehaviour
     {
@@ -37,8 +38,11 @@ namespace _Sources.Model
             if (_isActive == false)
                 return;
             
-            if(_timeCoroutine == null)
-                _timeCoroutine = StartCoroutine(TimeCoroutine());
+            if(_timeCoroutine != null)
+                return;
+            
+            _timeCoroutine = StartCoroutine(TimeCoroutine());
+            _levelTimeViewer.ShowTimers();
         }
 
         public void StopCounting()
@@ -50,7 +54,7 @@ namespace _Sources.Model
                 StopCoroutine(_timeCoroutine);
             
             _timeCoroutine = null;
-            Debug.Log("StopCounting");
+            _levelTimeViewer.HideTimers();
         }
 
         public void Revert()

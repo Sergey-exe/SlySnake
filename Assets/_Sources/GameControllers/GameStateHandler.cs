@@ -1,4 +1,6 @@
 using System;
+using _Sources.Map;
+using _Sources.Player;
 using UnityEngine;
 
 public class GameStateHandler : MonoBehaviour

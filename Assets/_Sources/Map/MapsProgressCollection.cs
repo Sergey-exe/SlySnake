@@ -1,33 +1,35 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapsProgressCollection : MonoBehaviour
+namespace _Sources.Map
 {
-    private List<MapProgressHandler> _mapsProgressHandlers = new();
-
-    public void AddHandler(MapProgressHandler mapProgressHandler)
+    public class MapsProgressCollection : MonoBehaviour
     {
-        if(mapProgressHandler == null)
-            throw new ArgumentNullException(nameof(mapProgressHandler));
-        
-        _mapsProgressHandlers.Add(mapProgressHandler);
-    }
+        private List<MapProgressHandler> _mapsProgressHandlers = new();
 
-    public bool HasEmptyItems()
-    {
-        foreach (var progressHandler in _mapsProgressHandlers)
+        public void AddHandler(MapProgressHandler mapProgressHandler)
         {
-            if(progressHandler.HasEmptyItems())
-                return true;
-        }
+            if(mapProgressHandler == null)
+                throw new ArgumentNullException(nameof(mapProgressHandler));
         
-        return false;
-    }
+            _mapsProgressHandlers.Add(mapProgressHandler);
+        }
 
-    public void Revert()
-    {
-        _mapsProgressHandlers.Clear();
+        public bool HasEmptyItems()
+        {
+            foreach (var progressHandler in _mapsProgressHandlers)
+            {
+                if(progressHandler.HasEmptyItems())
+                    return true;
+            }
+        
+            return false;
+        }
+
+        public void Revert()
+        {
+            _mapsProgressHandlers.Clear();
+        }
     }
 }

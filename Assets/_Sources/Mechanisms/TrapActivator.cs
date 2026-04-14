@@ -1,7 +1,7 @@
-﻿using System;
-using UnityEngine;
-
-public class TrapActivator : Mechanism
+﻿namespace _Sources.Mechanisms
 {
+    public class TrapActivator : Mechanism
+    {
 
+    }
 }

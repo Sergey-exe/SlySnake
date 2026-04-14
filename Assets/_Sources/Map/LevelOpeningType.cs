@@ -2,5 +2,6 @@
 {
     Open,
     Closed,
-    ClosedOrADD
+    Restart,
+    ClosedOrAD
 }

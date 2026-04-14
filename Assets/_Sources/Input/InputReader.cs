@@ -1,31 +1,40 @@
+using _Sources.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputReader : MonoBehaviour
+namespace _Sources.Input
 {
-    [SerializeField] private PlayersMover _playersMover;
-    
-    private PlayerInput _playerInput;
-    
-    public void Init()
+    public class InputReader : MonoBehaviour
     {
-        _playerInput = new PlayerInput();
-        _playerInput.Player.Move.performed += OnMove;
-    }
+        [SerializeField] private PlayersMover _playersMover;
     
-    public void Activate()
-    {
-        _playerInput.Enable();
-    }
+        private PlayerInput _playerInput;
+    
+        public void Init()
+        {
+            _playerInput = new PlayerInput();
+            _playerInput.Player.Move.performed += OnMove;
+        }
+    
+        public void Activate()
+        {
+            _playerInput.Enable();
+        }
 
-    public void Deactivate()
-    {
-        _playerInput.Disable();
-    }
+        public void Deactivate()
+        {
+            _playerInput.Disable();
+        }
 
-    private void OnMove(InputAction.CallbackContext context)
-    {
-        Vector2 moveDirection = context.action.ReadValue<Vector2>();
-        _playersMover.TryStartMove(new GameMapVector2(-(int)moveDirection.y, (int)moveDirection.x));
+        public void OnMove(GameMapVector2 direction)
+        {
+            _playersMover.TryStartMove(direction);
+        }
+
+        private void OnMove(InputAction.CallbackContext context)
+        {
+            Vector2 moveDirection = context.action.ReadValue<Vector2>();
+            _playersMover.TryStartMove(new GameMapVector2(-(int)moveDirection.y, (int)moveDirection.x));
+        }
     }
 }

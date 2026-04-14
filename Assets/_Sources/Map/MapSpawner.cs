@@ -1,245 +1,275 @@
 using System;
 using System.Collections.Generic;
-using _Sources.Map;
+using _Sources.Player;
 using Array2DEditor;
-using AYellowpaper.SerializedCollections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class MapSpawner : MonoBehaviour
+namespace _Sources.Map
 {
-    [SerializeField] private GameObject _mapItemPrefab;
-    [SerializeField] private Transform _mapsCollector;
-    [SerializeField] private PlayersSpawner _playersSpawner;
-    [SerializeField] private PlayersWayBuilder _wayBuilder;
-    [SerializeField] private MapItemChanger _mapItemChanger;
-    [SerializeField] private MapsProgressCollection mapsProgressCollection;
-    [SerializeField] private AllLevels _levels;
-    [SerializeField] private SpriteSetsData _spriteSetsData;
-    
-    private int _currentLevelIndex = 0;
-    private Vector2 _tileSize;
-    private List<Map> _maps;
-    private List<Rect> _placedRects = new(); 
-    private bool _isInit;
-
-    public event Action<List<Transform>> Spawned; 
-
-    public void Init(MapData mapData)
+    public class MapSpawner : MonoBehaviour
     {
-        _maps = new List<Map>();
-        _tileSize = _mapItemPrefab.GetComponent<SpriteRenderer>().bounds.size;
-        _isInit = true;
-    }
+        [SerializeField] private GameObject _mapItemPrefab;
+        [SerializeField] private Transform _mapsCollector;
+        [SerializeField] private PlayersSpawner _playersSpawner;
+        [SerializeField] private PlayersWayBuilder _wayBuilder;
+        [SerializeField] private MapItemChanger _mapItemChanger;
+        [SerializeField] private MapsProgressCollection mapsProgressCollection;
+        [SerializeField] private AllLevels _levels;
+        [SerializeField] private SpriteSetsData _spriteSetsData;
 
-    public void RestartLevel()
-    {
-        Revert();
-        SpawnMap();
-    }
+        private Vector2 _tileSize;
+        private List<global::_Sources.Map.Map> _maps;
+        private List<Rect> _placedRects = new();
+        private bool _isInit;
 
-    public void NextLevel()
-    {
-        _currentLevelIndex = (_currentLevelIndex + 1) % _levels.CountLevels;
-        
-        RestartLevel();
-    }
-    
-    [ContextMenu(nameof(SpawnMap))]
-    public void SpawnMap()
-    {
-        if (_isInit == false)
+        public int CurrentLevelIndex { get; private set; } = 0;
+
+        public event Action<List<Transform>> Spawned;
+        public event Action<int> OnNextLevel;
+        public event Action<int, LevelOpeningType> IsGotToAd;
+
+        public void Init(MapData mapData)
         {
-            Debug.LogError("Класс не инициализирован!");
-            return;
-        }
-        
-        if (_levels == null || _levels.CountLevels == 0)
-            throw new ArgumentNullException(nameof(_levels));
-
-        int newMapIndex = 0;
-        
-        _placedRects.Clear();
-
-        List<Maze> mazes = _levels.GetLevel(_currentLevelIndex).GetLevels();
-        Maze firstMaze = mazes[0];
-        SpawnLevelAtPosition(newMapIndex, firstMaze, Vector3.zero);
-        AddRectForLevel(firstMaze, Vector3.zero);
-        newMapIndex++;
-        
-        for (int i = 1; i < mazes.Count; i++)
-        {
-            Maze maze = mazes[i];
-            Vector2 size = GetLevelSizeInUnits(maze);
-            Vector3 position = FindClosestFitPosition(size);
-            SpawnLevelAtPosition(newMapIndex, maze, position);
-            AddRectForLevel(maze, position);
-            newMapIndex++;
+            _maps = new List<global::_Sources.Map.Map>();
+            _tileSize = _mapItemPrefab.GetComponent<SpriteRenderer>().bounds.size;
+            _isInit = true;
         }
 
-        Spawned?.Invoke(GetOllMapsElements());
-        _wayBuilder.SetMaps(_maps);
-        _mapItemChanger.SetMaps(_maps);
-    }
-
-    private Vector2 GetLevelSizeInUnits(Maze maze)
-    {
-        int width = maze.Map.GridSize.x;
-        int height = maze.Map.GridSize.y;
-
-        return new Vector2(width * _tileSize.x, height * _tileSize.y);
-    }
-    
-    private void SpawnLevelAtPosition(int newMapIndex, Maze maze, Vector3 position)
-    {
-        List<MapItem> mapItems = new();
-        Array2DInt levelMap = maze.Map;
-
-        MapData mapData = new MapData();
-        
-        mapData.SetCurrentMap(levelMap.GetCells());
-
-        int width = levelMap.GridSize.x;
-        int height = levelMap.GridSize.y;
-
-        GameObject mapObject = new GameObject();
-        mapObject.name = maze.Name;
-        mapObject.transform.SetParent(_mapsCollector);
-        Map map = new Map();
-        MapProgressHandler mapProgressHandler = new(map);
-        mapsProgressCollection.AddHandler(mapProgressHandler);
-        
-        for (int y = 0; y < height; y++)
+        public void SetCurrentLevelIndex(int index)
         {
-            for (int x = 0; x < width; x++)
+            if (index < 0 || index >= _levels.CountLevels)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            CurrentLevelIndex = index;
+        }
+
+        public void RestartLevel()
+        {
+            Revert();
+            SpawnMap();
+        }
+
+        public void NextLevel()
+        {
+            int step = 1;
+            int nextIndex = CurrentLevelIndex + step;
+
+            if (_levels.GetLevelOpeningType(nextIndex) == LevelOpeningType.ClosedOrAD)
             {
-                int tileType = levelMap.GetCell(x, y);
-                Sprite sprite = _spriteSetsData.SpriteSets[maze.Type].Sprites[(MapItemType)tileType];
-                
-                var newTile = Instantiate(_mapItemPrefab, mapObject.transform);
-                newTile.name = $"Tile_{x}_{y}";
-
-                Vector3 tilePosition = position + new Vector3(x * _tileSize.x, (height - y - 1) * _tileSize.y, 0);
-                newTile.transform.position = tilePosition;
-
-                var spriteRenderer = newTile.GetComponent<SpriteRenderer>();
-                spriteRenderer.sprite = sprite;
-
-                MapItem mapItem = newTile.GetComponent<MapItem>();
-                
-                if (mapItem == null)
-                    mapItem = newTile.AddComponent<MapItem>();
-                
-                mapItem.SetType((MapItemType)tileType);
-
-                PositionInMap positionInMap = new PositionInMap { X = x, Y = y };
-                mapItem.SetPositionInMap(positionInMap);
-
-                mapItems.Add(mapItem);
-                
-                TrySpawnPlayer(tileType, newMapIndex, newTile.transform);
+                step++;
+                IsGotToAd?.Invoke(nextIndex, LevelOpeningType.ClosedOrAD);
             }
+
+            CurrentLevelIndex = (CurrentLevelIndex + step) % _levels.CountLevels;
+
+            RestartLevel();
+            OnNextLevel?.Invoke(step);
+        }
+
+        [ContextMenu(nameof(SpawnMap))]
+        public void SpawnMap()
+        {
+            if (!_isInit)
+            {
+                Debug.LogError("Класс не инициализирован!");
+                return;
+            }
+
+            _placedRects.Clear();
+
+            List<Maze> mazes = _levels.GetLevel(CurrentLevelIndex).GetMazes();
+
+            int index = 0;
+
+            Maze firstMaze = mazes[0];
+            SpawnLevelAtPosition(index, firstMaze, Vector3.zero);
+            AddRectForLevel(firstMaze, Vector3.zero);
+            index++;
+
+            for (int i = 1; i < mazes.Count; i++)
+            {
+                Maze maze = mazes[i];
+
+                Vector2 size = GetLevelSizeInUnits(maze);
+                Vector3 pos = FindClosestFitPosition(size);
+
+                SpawnLevelAtPosition(index, maze, pos);
+                AddRectForLevel(maze, pos);
+
+                index++;
+            }
+
+            Spawned?.Invoke(GetOllMapsElements());
+            _wayBuilder.SetMaps(_maps);
+            _mapItemChanger.SetMaps(_maps);
         }
         
-        map.Init(mapItems, maze.Type, mapData, _spriteSetsData, newMapIndex);
-        _maps.Add(map);
-    }
-    
-    [ContextMenu(nameof(Revert))]
-    private void Revert()
-    {
-        foreach (Transform child in _mapsCollector)
-            Destroy(child.gameObject);
-        
-        _mapItemChanger.Revert();
-        _wayBuilder.Revert();
-    }
-
-    private void AddRectForLevel(Maze maze, Vector3 position)
-    {
-        int width = maze.Map.GridSize.x;
-        int height = maze.Map.GridSize.y;
-        Vector2 size = new Vector2(width * _tileSize.x, height * _tileSize.y);
-        
-        Rect rect = new Rect(
-            position.x - size.x / 2f,
-            position.y - size.y / 2f,
-            size.x,
-            size.y
-        );
-        
-        _placedRects.Add(rect);
-    }
-
-    private Vector3 FindClosestFitPosition(Vector2 size)
-    {
-        float maxRadius = 50f;
-        float step = _tileSize.x;
-        int minCountPoints = 8;
-        
-        float radius = 0f;
-
-        while (radius <= maxRadius)
+        public void Revert()
         {
-            int pointsCount = Mathf.CeilToInt(2 * Mathf.PI * radius / step);
-            pointsCount = Math.Max(pointsCount, minCountPoints);
+            foreach (Transform child in _mapsCollector)
+                Destroy(child.gameObject);
 
-            for (int i = 0; i < pointsCount; i++)
+            _mapItemChanger.Revert();
+            _wayBuilder.Revert();
+        }
+
+        private Vector2 GetLevelSizeInUnits(Maze maze)
+        {
+            return new Vector2(
+                maze.Map.GridSize.x * _tileSize.x,
+                maze.Map.GridSize.y * _tileSize.y
+            );
+        }
+
+        private void SpawnLevelAtPosition(int newMapIndex, Maze maze, Vector3 position)
+        {
+            List<MapItem> mapItems = new();
+            Array2DInt levelMap = maze.Map;
+
+            MapData mapData = new MapData();
+            mapData.SetCurrentMap(levelMap.GetCells());
+
+            int width = levelMap.GridSize.x;
+            int height = levelMap.GridSize.y;
+
+            GameObject mapObject = new GameObject();
+            mapObject.transform.SetParent(_mapsCollector);
+
+            global::_Sources.Map.Map map = new global::_Sources.Map.Map();
+            MapProgressHandler mapProgressHandler = new(map);
+            mapsProgressCollection.AddHandler(mapProgressHandler);
+
+            for (int y = 0; y < height; y++)
             {
-                float angle = i * 2 * Mathf.PI / pointsCount;
-                Vector3 candidatePos = new Vector3(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle), 0);
-
-                Rect candidateRect = new Rect(
-                    candidatePos.x - size.x / 2f,
-                    candidatePos.y - size.y / 2f,
-                    size.x,
-                    size.y
-                );
-
-                if (IsPositionFree(candidateRect))
+                for (int x = 0; x < width; x++)
                 {
-                    return candidatePos;
+                    int tileType = levelMap.GetCell(x, y);
+                    
+                    MapItemType spriteType = (MapItemType)tileType;
+                    
+                    Sprite sprite = _spriteSetsData.SpriteSets[maze.Type]
+                        .Sprites[spriteType];
+
+                    var tile = Instantiate(_mapItemPrefab, mapObject.transform);
+                    tile.name = $"Tile_{x}_{y}";
+
+                    Vector3 tilePosition = position + new Vector3(
+                        x * _tileSize.x,
+                        (height - y - 1) * _tileSize.y,
+                        0);
+
+                    tile.transform.position = tilePosition;
+
+                    var spriteRenderer = tile.GetComponent<SpriteRenderer>();
+                    spriteRenderer.sprite = sprite;
+
+                    MapItem mapItem = tile.GetComponent<MapItem>();
+                    
+                    if (mapItem == null)
+                        mapItem = tile.AddComponent<MapItem>();
+
+                    mapItem.SetType((MapItemType)tileType);
+                    mapItem.SetPositionInMap(new PositionInMap { X = x, Y = y });
+
+                    mapItems.Add(mapItem);
+
+                    if (tileType != (int)MapItemType.Player)
+                        continue;
+                    
+                    spriteType = MapItemType.TailPlayer;
+                        
+                    TrySpawnPlayer(tileType, newMapIndex, sprite, tile.transform);
+                        
+                    sprite = _spriteSetsData.SpriteSets[maze.Type]
+                        .Sprites[spriteType];
+                        
+                    spriteRenderer.sprite = sprite;
                 }
             }
 
-            radius += step;
+            map.Init(mapItems, maze.Type, mapData, _spriteSetsData, newMapIndex);
+            _maps.Add(map);
         }
-        
-        return Vector3.zero;
-    }
 
-    private bool IsPositionFree(Rect rect)
-    {
-        foreach (var placedRect in _placedRects)
+        private void AddRectForLevel(Maze maze, Vector3 position)
         {
-            if (placedRect.Overlaps(rect))
-                return false;
+            Vector2 size = GetLevelSizeInUnits(maze);
+
+            Rect rect = new Rect(
+                position.x - size.x / 2f,
+                position.y - size.y / 2f,
+                size.x,
+                size.y
+            );
+
+            _placedRects.Add(rect);
         }
-        return true;
-    }
 
-    private void TrySpawnPlayer(int currentType, int mapIndex, Transform playerTransform)
-    {
-        if(_playersSpawner == null)
-            throw new ArgumentNullException(nameof(_playersSpawner));
-        
-        if (currentType == (int)MapItemType.Player)
-            _playersSpawner.Spawn(mapIndex, playerTransform);
-    }
-
-    private List<Transform> GetOllMapsElements()
-    {
-        List<Transform> items = new();
-
-        foreach (var map in _maps)
+        private Vector3 FindClosestFitPosition(Vector2 size)
         {
-            foreach (var item in map.GetItemTransforms())
+            float maxRadius = 50f;
+            float step = _tileSize.x;
+            int minPoints = 8;
+
+            float radius = 0f;
+
+            while (radius <= maxRadius)
             {
-                items.Add(item);
+                int points = Mathf.CeilToInt(2 * Mathf.PI * radius / step);
+                points = Math.Max(points, minPoints);
+
+                for (int i = 0; i < points; i++)
+                {
+                    float angle = i * 2 * Mathf.PI / points;
+
+                    Vector3 candidate = new Vector3(
+                        radius * Mathf.Cos(angle),
+                        radius * Mathf.Sin(angle),
+                        0);
+
+                    Rect rect = new Rect(
+                        candidate.x - size.x / 2f,
+                        candidate.y - size.y / 2f,
+                        size.x,
+                        size.y
+                    );
+
+                    if (IsPositionFree(rect))
+                        return candidate;
+                }
+
+                radius += step;
             }
+
+            return Vector3.zero;
         }
 
-        
-        return items;
+        private bool IsPositionFree(Rect rect)
+        {
+            foreach (var r in _placedRects)
+                if (r.Overlaps(rect))
+                    return false;
+
+            return true;
+        }
+
+        private void TrySpawnPlayer(int tileType, int mapIndex, Sprite sprite, Transform t)
+        {
+            if (_playersSpawner == null)
+                throw new ArgumentNullException(nameof(_playersSpawner));
+
+            if (tileType == (int)MapItemType.Player)
+                _playersSpawner.Spawn(mapIndex, sprite, t);
+        }
+
+        private List<Transform> GetOllMapsElements()
+        {
+            List<Transform> items = new();
+
+            foreach (var map in _maps)
+                items.AddRange(map.GetItemTransforms());
+
+            return items;
+        }
     }
 }

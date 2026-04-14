@@ -1,0 +1,16 @@
+namespace Assets.FSM
+{
+    public abstract class FsmState
+    {
+        protected readonly Fsm Fsm;
+
+        public FsmState(Fsm fsm)
+        {
+            Fsm = fsm;
+        }
+    
+        public virtual void Update(){}
+        public virtual void Enter(){}
+        public virtual void Exit(){}
+    }
+}

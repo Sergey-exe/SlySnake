@@ -1,41 +1,44 @@
 ﻿using UnityEngine;
 
-public class MiniMapPainter : MonoBehaviour
+namespace _Sources.UI
 {
-    [SerializeField] private Camera _previewCamera;
-    [SerializeField] private Transform _mapsRoot;
-    [SerializeField] private float _padding = 1.1f;
-
-    public void Paint()
+    public class MiniMapPainter : MonoBehaviour
     {
-        Bounds bounds = CalculateBounds();
+        [SerializeField] private Camera _previewCamera;
+        [SerializeField] private Transform _mapsRoot;
+        [SerializeField] private float _padding = 1.1f;
 
-        Vector3 center = bounds.center;
+        public void Paint()
+        {
+            Bounds bounds = CalculateBounds();
 
-        _previewCamera.transform.position =
-            new Vector3(center.x, center.y, -10f);
+            Vector3 center = bounds.center;
 
-        float sizeX = bounds.size.x / _previewCamera.aspect / 2f;
-        float sizeY = bounds.size.y / 2f;
+            _previewCamera.transform.position =
+                new Vector3(center.x, center.y, -10f);
 
-        _previewCamera.orthographicSize =
-            Mathf.Max(sizeX, sizeY) * _padding;
+            float sizeX = bounds.size.x / _previewCamera.aspect / 2f;
+            float sizeY = bounds.size.y / 2f;
 
-        _previewCamera.Render();
-    }
+            _previewCamera.orthographicSize =
+                Mathf.Max(sizeX, sizeY) * _padding;
 
-    private Bounds CalculateBounds()
-    {
-        Renderer[] renderers = _mapsRoot.GetComponentsInChildren<Renderer>();
+            _previewCamera.Render();
+        }
 
-        if (renderers.Length == 0)
-            return new Bounds(Vector3.zero, Vector3.one);
+        private Bounds CalculateBounds()
+        {
+            Renderer[] renderers = _mapsRoot.GetComponentsInChildren<Renderer>();
 
-        Bounds bounds = renderers[0].bounds;
+            if (renderers.Length == 0)
+                return new Bounds(Vector3.zero, Vector3.one);
 
-        foreach (var r in renderers)
-            bounds.Encapsulate(r.bounds);
+            Bounds bounds = renderers[0].bounds;
 
-        return bounds;
+            foreach (var r in renderers)
+                bounds.Encapsulate(r.bounds);
+
+            return bounds;
+        }
     }
 }

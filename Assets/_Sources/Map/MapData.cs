@@ -1,15 +1,18 @@
 
-public class MapData 
+namespace _Sources.Map
 {
-    private int[,] _currentMap;
-
-    public void SetCurrentMap(int[,] map)
+    public class MapData 
     {
-        _currentMap = map.Clone() as int[,];
-    }
+        private int[,] _currentMap;
 
-    public int[,] GetCurrentMap()
-    {
-        return _currentMap.Clone() as int[,];
+        public void SetCurrentMap(int[,] map)
+        {
+            _currentMap = map.Clone() as int[,];
+        }
+
+        public int[,] GetCurrentMap()
+        {
+            return _currentMap.Clone() as int[,];
+        }
     }
 }

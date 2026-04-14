@@ -1,4 +1,7 @@
-using _Sources.Model;
+using _Sources.Input;
+using _Sources.Map;
+using _Sources.TimeManagement;
+using _Sources.Player;
 using UnityEngine;
 
 public class LevelEntryPoint : MonoBehaviour

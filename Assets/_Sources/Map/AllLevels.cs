@@ -19,4 +19,9 @@ public class AllLevels : ScriptableObject
         
         return _levelsData[index];
     }
+
+    public LevelOpeningType GetLevelOpeningType(int index)
+    {
+        return _levelsData[index].OpeningType;
+    }
 }

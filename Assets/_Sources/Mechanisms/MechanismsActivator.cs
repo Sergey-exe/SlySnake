@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using _Sources.Mechanisms;
 using UnityEngine;
 
 public class MechanismsActivator : MonoBehaviour

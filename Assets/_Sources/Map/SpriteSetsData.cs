@@ -1,8 +1,11 @@
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
-public class SpriteSetsData : MonoBehaviour
+namespace _Sources.Map
 {
-    [SerializedDictionary("Тип спрайтсета", "Спрайтсет")] 
-    public SerializedDictionary<SpriteSetType, SpriteSet> SpriteSets;
+    public class SpriteSetsData : MonoBehaviour
+    {
+        [SerializedDictionary("Тип спрайтсета", "Спрайтсет")] 
+        public SerializedDictionary<SpriteSetType, SpriteSet> SpriteSets;
+    }
 }

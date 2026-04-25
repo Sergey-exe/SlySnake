@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using _Sources.Map;
 using _Sources.UI.Menu.FSM;
 using UnityEngine;
@@ -39,14 +40,18 @@ namespace _Sources.UI.Menu
             _mapSpawner.IsGotToAd -= ChangeStateToIndex;
         }
 
-        public void Init()
+        public async Task Init()
         {
             foreach (var item in _items)
             {
-                if (item.TryGetComponent(out LevelMenuFsmExample _example))
-                    _example.Init();
+                if (item.TryGetComponent(out LevelMenuFsmExample example))
+                {
+                    example.Init(); 
+                }
+                
+                await Task.Yield(); 
             }
-        
+
             UpdateOpeningTypes();
         }
         

@@ -59,16 +59,15 @@ namespace _Sources.Player
         private void StopActiveCoroutines()
         {
             foreach (var coroutine in _moveCoroutines)
-            {
                 if (coroutine != null) StopCoroutine(coroutine);
-            }
+            
             _moveCoroutines.Clear();
             _activeCoroutinesCount = 0;
+            _isMoving = false;
         }
 
         private IEnumerator MovePlayerRoutine(int mapIndex, Transform playerTransform, List<Transform> waypoints)
         {
-            // Кэшируем количество точек
             int waypointsCount = waypoints.Count;
 
             for (int i = 0; i < waypointsCount; i++)
@@ -77,15 +76,13 @@ namespace _Sources.Player
                 Vector3 startPos = playerTransform.position;
                 Vector3 endPos = targetPoint.position;
                 float elapsedTime = 0f;
-
-                // Движение к конкретной точке
+                
                 while (elapsedTime < _duration)
                 {
                     elapsedTime += Time.deltaTime;
-                    float t = elapsedTime / _duration;
+                    float time = elapsedTime / _duration;
                     
-                    // Используем SmoothStep для более приятного движения (опционально)
-                    playerTransform.position = Vector3.Lerp(startPos, endPos, t);
+                    playerTransform.position = Vector3.MoveTowards(startPos, endPos, time);
                     yield return null; 
                 }
 

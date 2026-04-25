@@ -13,9 +13,12 @@ namespace _Sources.Map
         [SerializeField] private PlayersSpawner _playersSpawner;
         [SerializeField] private PlayersWayBuilder _wayBuilder;
         [SerializeField] private MapItemChanger _mapItemChanger;
-        [SerializeField] private MapsProgressCollection mapsProgressCollection;
+        [SerializeField] private MapsProgressCollection _mapsProgressCollection;
         [SerializeField] private AllLevels _levels;
         [SerializeField] private SpriteSetsData _spriteSetsData;
+        [SerializeField] private EnvironmentSetsData _environmentSetsData;
+        [SerializeField] private Camera _camera;
+        [SerializeField] private SoundChanger _soundChanger;
 
         private Vector2 _tileSize;
         private List<global::_Sources.Map.Map> _maps;
@@ -45,7 +48,7 @@ namespace _Sources.Map
 
         public void RestartLevel()
         {
-            Revert();
+            Revert(false);
             SpawnMap();
         }
 
@@ -76,13 +79,16 @@ namespace _Sources.Map
             }
 
             _placedRects.Clear();
-
-            List<Maze> mazes = _levels.GetLevel(CurrentLevelIndex).GetMazes();
+            Level currentLevel = _levels.GetLevel(CurrentLevelIndex);
+            List<Maze> mazes = currentLevel.GetMazes();
 
             int index = 0;
 
             Maze firstMaze = mazes[0];
-            SpawnLevelAtPosition(index, firstMaze, Vector3.zero);
+
+            EnvironmentSetsType environmentSetType = currentLevel.EnvironmentSetType;
+            SetBackground(environmentSetType);
+            SpawnLevelAtPosition(index, firstMaze, environmentSetType, Vector3.zero);
             AddRectForLevel(firstMaze, Vector3.zero);
             index++;
 
@@ -93,7 +99,7 @@ namespace _Sources.Map
                 Vector2 size = GetLevelSizeInUnits(maze);
                 Vector3 pos = FindClosestFitPosition(size);
 
-                SpawnLevelAtPosition(index, maze, pos);
+                SpawnLevelAtPosition(index, maze, environmentSetType, pos);
                 AddRectForLevel(maze, pos);
 
                 index++;
@@ -104,13 +110,16 @@ namespace _Sources.Map
             _mapItemChanger.SetMaps(_maps);
         }
         
-        public void Revert()
+        public void Revert(bool setDefault)
         {
             foreach (Transform child in _mapsCollector)
                 Destroy(child.gameObject);
 
             _mapItemChanger.Revert();
             _wayBuilder.Revert();
+            
+            if(setDefault)
+                SetBackground(EnvironmentSetsType.Default);
         }
 
         private Vector2 GetLevelSizeInUnits(Maze maze)
@@ -121,7 +130,21 @@ namespace _Sources.Map
             );
         }
 
-        private void SpawnLevelAtPosition(int newMapIndex, Maze maze, Vector3 position)
+        private void SetBackground(EnvironmentSetsType backgroundType)
+        {
+            _camera.backgroundColor = _environmentSetsData.Environments[backgroundType].BackgroundColor;
+            _soundChanger.ChangeSound(_environmentSetsData.Environments[backgroundType].BackgroundSound);
+
+            foreach (var gameObject in _environmentSetsData.Environments[backgroundType].SpecialObjects)
+            {
+                if (gameObject == null)
+                    continue;
+                    
+                Instantiate(gameObject, _mapsCollector);
+            }
+        }
+
+        private void SpawnLevelAtPosition(int newMapIndex, Maze maze, EnvironmentSetsType backgroundType, Vector3 position)
         {
             List<MapItem> mapItems = new();
             Array2DInt levelMap = maze.Map;
@@ -137,7 +160,7 @@ namespace _Sources.Map
 
             global::_Sources.Map.Map map = new global::_Sources.Map.Map();
             MapProgressHandler mapProgressHandler = new(map);
-            mapsProgressCollection.AddHandler(mapProgressHandler);
+            _mapsProgressCollection.AddHandler(mapProgressHandler);
 
             for (int y = 0; y < height; y++)
             {
@@ -178,7 +201,7 @@ namespace _Sources.Map
                     
                     spriteType = MapItemType.TailPlayer;
                         
-                    TrySpawnPlayer(tileType, newMapIndex, sprite, tile.transform);
+                    TrySpawnPlayer(tileType, newMapIndex, sprite, tile.transform, _environmentSetsData.Environments[backgroundType].ImpactSound);
                         
                     sprite = _spriteSetsData.SpriteSets[maze.Type]
                         .Sprites[spriteType];
@@ -253,13 +276,13 @@ namespace _Sources.Map
             return true;
         }
 
-        private void TrySpawnPlayer(int tileType, int mapIndex, Sprite sprite, Transform t)
+        private void TrySpawnPlayer(int tileType, int mapIndex, Sprite sprite, Transform transform, AudioClip impactSound)
         {
             if (_playersSpawner == null)
                 throw new ArgumentNullException(nameof(_playersSpawner));
 
             if (tileType == (int)MapItemType.Player)
-                _playersSpawner.Spawn(mapIndex, sprite, t);
+                _playersSpawner.Spawn(mapIndex, sprite, transform, impactSound);
         }
 
         private List<Transform> GetOllMapsElements()

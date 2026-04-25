@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using YG;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -56,7 +57,11 @@ namespace _Sources.UI.Menu
 
         public void Ads()
         {
-            OnAds?.Invoke(LevelIndex);
+            YG2.RewardedAdvShow("BonusLevel", () =>
+            {
+                _openingType = LevelOpeningType.Restart;
+                OnAds?.Invoke(LevelIndex);
+            });
         }
     }
 }

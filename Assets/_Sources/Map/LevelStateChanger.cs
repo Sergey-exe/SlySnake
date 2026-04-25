@@ -22,7 +22,7 @@ namespace _Sources.Map
         public void Remove()
         {
             _playersSpawner.Revert();
-            _mapSpawner.Revert();
+            _mapSpawner.Revert(true);
         }
 
         public void Next()

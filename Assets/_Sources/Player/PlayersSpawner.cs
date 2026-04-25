@@ -8,6 +8,7 @@ namespace _Sources.Player
     {
         [SerializeField] private global::Player _prefab;
         [SerializeField] private List<global::Player> _players;
+        [SerializeField] private PlayersMover _playersMover;
     
         private PlayersTransformData _playersTransformData;
 
@@ -20,7 +21,7 @@ namespace _Sources.Player
             _isInit = true;
         }
 
-        public void Spawn(int mapIndex, Sprite sprite, Transform spawnPoint)
+        public void Spawn(int mapIndex, Sprite sprite, Transform spawnPoint, AudioClip impactSound)
         {
             if (!_isInit)
                 throw new Exception($"Класс {nameof(PlayersSpawner)} не инициализирован!");
@@ -28,6 +29,11 @@ namespace _Sources.Player
             global::Player player = Instantiate(_prefab, spawnPoint.position, spawnPoint.rotation);
             
             player.GetComponent<SpriteRenderer>().sprite = sprite;
+            PlayerSoundPlayer soundPlayer = player.GetComponent<PlayerSoundPlayer>();
+            
+            soundPlayer.SetClip(impactSound);
+            _playersMover.PlayerFinished += soundPlayer.Play;
+            soundPlayer.Destroy += Unsubscribe;
         
             _playersTransformData.SetTransform(mapIndex, player.transform);
         
@@ -42,6 +48,12 @@ namespace _Sources.Player
                 Destroy(player.gameObject);
         
             _players.Clear();
+        }
+
+        private void Unsubscribe(PlayerSoundPlayer soundPlayer)
+        {
+            soundPlayer.Destroy -= Unsubscribe;
+            _playersMover.PlayerFinished -= soundPlayer.Play;
         }
     }
 }

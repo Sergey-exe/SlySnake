@@ -19,6 +19,7 @@ namespace _Sources.Player
 
         public event Action<int, Transform> InPoint;
         public event Action PlayersFinished;
+        public event Action PlayerFinished;
     
         public void Init(PlayersTransformData playersTransformData)
         {
@@ -95,6 +96,7 @@ namespace _Sources.Player
 
             _countMoving--;
             TryPlayersFinished();
+            PlayerFinished?.Invoke();
         }
     }
 }

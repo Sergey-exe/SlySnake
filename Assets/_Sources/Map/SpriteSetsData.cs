@@ -5,7 +5,9 @@ namespace _Sources.Map
 {
     public class SpriteSetsData : MonoBehaviour
     {
-        [SerializedDictionary("Тип спрайтсета", "Спрайтсет")] 
-        public SerializedDictionary<SpriteSetType, SpriteSet> SpriteSets;
+        public SpriteSetsType spriteSetsType;
+        
+        [SerializedDictionary("Тип окружения", "Спрайтсет")] 
+        public SerializedDictionary<SpriteSetsType, SpriteSet> SpriteSets;
     }
 }

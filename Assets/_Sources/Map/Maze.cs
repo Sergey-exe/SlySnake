@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New maze", menuName = "Maps/Create new maze", order = 51)]
 public class Maze : ScriptableObject
 {
-    [field: SerializeField] public SpriteSetType Type { get; private set; }
+    [field: SerializeField] public SpriteSetsType Type { get; private set; }
 
     [field: SerializeField] public string Name { get; private set; }
     

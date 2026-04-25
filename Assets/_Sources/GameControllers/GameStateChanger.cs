@@ -5,6 +5,7 @@ using _Sources.TimeManagement;
 using _Sources.TimeManagement;
 using _Sources.UI;
 using _Sources.UI.Menu;
+using YG;
 using UnityEngine;
 
 namespace _Sources.GameControllers
@@ -59,6 +60,8 @@ namespace _Sources.GameControllers
 
         public void Pause()
         {
+            YG2.InterstitialAdvShow();
+            
             _fsmExample.ChangeState(GameStates.Pause);
         }
 
@@ -69,6 +72,8 @@ namespace _Sources.GameControllers
 
         private void Revert()
         {
+            YG2.InterstitialAdvShow();
+            
             _gameStateHandler.Revert();
             _levelStateChanger.Restart();
             _levelTimeCounter.Revert();
@@ -78,6 +83,8 @@ namespace _Sources.GameControllers
 
         private void Next()
         {
+            YG2.InterstitialAdvShow();
+            
             _levelStateChanger.Next();
             _levelTimeCounter.Revert();
             
@@ -86,6 +93,8 @@ namespace _Sources.GameControllers
 
         private void BackToMenu()
         {
+            YG2.InterstitialAdvShow();
+            
             _levelStateChanger.Remove();
             _gameStateHandler.Revert();
             _levelTimeCounter.Revert();

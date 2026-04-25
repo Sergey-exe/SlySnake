@@ -1,0 +1,3 @@
+﻿Build path: D:/Unity torture room/ZombieFish (TestTask)/SlySnakeBuilds/Web
+Build number: 10
+PluginYG version: 2.0091

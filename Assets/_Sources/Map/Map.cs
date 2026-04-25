@@ -6,20 +6,20 @@ namespace _Sources.Map
 {
     public class Map 
     {
-        private SpriteSetType _spriteSetType;
+        private SpriteSetsType _spriteSetsType;
         private List<MapItem> _items;
         private MapData _mapData;
         private SpriteSetsData _spriteSetsData;
     
         public int Index { get; private set; }
 
-        public void Init(List<MapItem> items, SpriteSetType spriteSetType, MapData mapData, SpriteSetsData spriteSetsData, int index)
+        public void Init(List<MapItem> items, SpriteSetsType spriteSetsType, MapData mapData, SpriteSetsData spriteSetsData, int index)
         {
             if(index < 0)
                 throw new IndexOutOfRangeException(nameof(index));
         
             Index = index;
-            _spriteSetType = spriteSetType;
+            _spriteSetsType = spriteSetsType;
             _items = items ?? throw new ArgumentNullException(nameof(items));
             _mapData = mapData ?? throw new ArgumentNullException(nameof(mapData));
             _spriteSetsData = spriteSetsData ?? throw new ArgumentNullException(nameof(spriteSetsData));
@@ -48,7 +48,7 @@ namespace _Sources.Map
                     $"Это может быть вызвано не правильным Transform, или же компонент {nameof(SpriteRenderer)} остутствует на тайле.");
         
             mapItem.SetType(MapItemType.TailPlayer);
-            spriteRenderer.sprite = _spriteSetsData.SpriteSets[_spriteSetType].Sprites[MapItemType.TailPlayer];
+            spriteRenderer.sprite = _spriteSetsData.SpriteSets[_spriteSetsType].Sprites[MapItemType.TailPlayer];
         }
     
         public GameMapVector2 SearchPlayer()

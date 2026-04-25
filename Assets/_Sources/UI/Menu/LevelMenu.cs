@@ -12,11 +12,16 @@ namespace _Sources.UI.Menu
         [SerializeField] private MapSpawner _mapSpawner;
 
         public event Action OnStart;
-    
+
+        public int CurrentLevelIndex { get; private set; }
+
         private void OnEnable()
         {
             foreach (var item in _items)
                 item.OnPlay += Play;
+            
+            foreach (var item in _items)
+                item.OnAds += PlayAfterAD;
         
             _mapSpawner.OnNextLevel += ChangeState;
             _mapSpawner.IsGotToAd += ChangeStateToIndex;
@@ -26,6 +31,9 @@ namespace _Sources.UI.Menu
         {
             foreach (var item in _items)
                 item.OnPlay -= Play;
+            
+            foreach (var item in _items)
+                item.OnAds -= PlayAfterAD;
         
             _mapSpawner.OnNextLevel -= ChangeState;
             _mapSpawner.IsGotToAd -= ChangeStateToIndex;
@@ -48,6 +56,13 @@ namespace _Sources.UI.Menu
             OnStart?.Invoke();
         }
 
+        public void PlayAfterAD(int levelIndex)
+        {
+            Play(levelIndex);
+            
+            UpdateOpeningTypes();
+        }
+
         public void ChangeState(int step)
         {
             for (int i = _items.Count - 1; i > 0; i--)
@@ -55,6 +70,7 @@ namespace _Sources.UI.Menu
                 if (_items[i].LevelIndex == _mapSpawner.CurrentLevelIndex)
                 {
                     _items[i].ChangeOpeningType(LevelOpeningType.Open);
+                    CurrentLevelIndex = i;
 
                     _items[i - step].ChangeOpeningType(LevelOpeningType.Restart);
                 

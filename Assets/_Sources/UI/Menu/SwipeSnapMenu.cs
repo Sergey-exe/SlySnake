@@ -13,6 +13,7 @@ namespace _Sources.UI.Menu
 
         [SerializeField] private RectTransform _contentContainer;
         [SerializeField] private Scrollbar _scrollBar;
+        [SerializeField] private LevelMenu _levelMenu;
         [SerializeField] private float _snapSpeed;
 
         private float _targetScrollBarValueNormalized = 0;
@@ -26,6 +27,11 @@ namespace _Sources.UI.Menu
         public event Action<int> TabSnapped;
 
         public int SelectedTabIndex { get; private set; }
+
+        private void OnEnable()
+        {
+            SelectedTab(_levelMenu.CurrentLevelIndex);
+        }
 
         private void Start()
         {

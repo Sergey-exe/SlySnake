@@ -1,4 +1,5 @@
 using Lean.Touch;
+using RimuruDev;
 using UnityEngine;
 
 namespace _Sources.Input
@@ -8,10 +9,11 @@ namespace _Sources.Input
         private const float MinSwipeDistance = 50;
 
         [SerializeField] private InputReader _inputReader;
+        [SerializeField] private DeviceTypeDetector _deviceTypeDetector;
     
         private int _step = 1;
         private bool _isInit;
-        private bool _isActive;
+        private bool _isMobile;
 
         private void OnEnable()
         {
@@ -21,11 +23,18 @@ namespace _Sources.Input
         private void OnDisable()
         {
             LeanTouch.OnFingerSwipe -= HandleSwipe;
-            _isActive = false;
+        }
+
+        private void Start()
+        {
+            _isMobile = _deviceTypeDetector.CurrentDeviceType == CurrentDeviceType.WebMobile;
         }
     
         private void HandleSwipe(LeanFinger finger)
         {
+            if(_isMobile == false)
+                return;
+            
             if (finger.StartedOverGui)
                 return;
 

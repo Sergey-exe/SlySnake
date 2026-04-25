@@ -768,6 +768,7 @@ GameObject:
   - component: {fileID: 414272295593322118}
   - component: {fileID: 1425734714958868999}
   - component: {fileID: 8132457075126159647}
+  - component: {fileID: 5825366582037944611}
   m_Layer: 5
   m_Name: EducationCanvas
   m_TagString: Untagged
@@ -818,7 +819,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -5
   m_TargetDisplay: 0
 --- !u!114 &414272295593322118
 MonoBehaviour:
@@ -876,3 +877,17 @@ MonoBehaviour:
   - {fileID: 7719484896077728150}
   _objectsForMobile:
   - {fileID: 2917674435204909633}
+--- !u!114 &5825366582037944611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8683385653007184304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da0290fac033c4f8284ece0ce9813bb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <CurrentDeviceType>k__BackingField: 0
+  enableDeviceSimulator: 1

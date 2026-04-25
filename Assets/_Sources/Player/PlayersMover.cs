@@ -11,10 +11,9 @@ namespace _Sources.Player
         [SerializeField] private float _duration;
     
         private PlayersTransformData _playersTransformData;
-        private List<Coroutine> _moveCoroutines = new();
-        private int _countMoving = 0;
+        private readonly List<Coroutine> _moveCoroutines = new();
+        private int _activeCoroutinesCount = 0;
         private bool _isMoving;
-    
         private bool _isInit;
 
         public event Action<int, Transform> InPoint;
@@ -24,79 +23,93 @@ namespace _Sources.Player
         public void Init(PlayersTransformData playersTransformData)
         {
             _playersTransformData = playersTransformData ?? throw new ArgumentNullException(nameof(playersTransformData));
-        
             _isInit = true;
         }
 
         public void TryStartMove(GameMapVector2 direction)
         {
-            if(!_isInit)
-                return;
-        
-            if (_isMoving)
+            if (!_isInit || _isMoving)
                 return;
 
-            StopAllCoroutines();
-            _moveCoroutines.Clear();
-            _countMoving = 0;
-
+            StopActiveCoroutines();
+            
             _isMoving = true;
-        
-            for (int i = 0; i < _playersTransformData.PlayersCount; i++)
+            int count = _playersTransformData.PlayersCount;
+
+            for (int i = 0; i < count; i++)
             {
                 List<Transform> waypoints = _wayBuilder.SearchWay(i, direction);
-                var coroutine = StartCoroutine(MovePlayer(i, _playersTransformData.GetTransform(i) , waypoints, _duration));
-            
+                
+                // Если пути нет, сразу уменьшаем счетчик потенциальных корутин
+                if (waypoints == null || waypoints.Count == 0) continue;
+
+                _activeCoroutinesCount++;
+                var coroutine = StartCoroutine(MovePlayerRoutine(i, _playersTransformData.GetTransform(i), waypoints));
                 _moveCoroutines.Add(coroutine);
-                _countMoving++;
+            }
+
+            // Если ни один игрок не смог начать движение
+            if (_activeCoroutinesCount == 0)
+            {
+                _isMoving = false;
+                PlayersFinished?.Invoke();
             }
         }
 
-        private void TryPlayersFinished()
+        private void StopActiveCoroutines()
         {
-            if (_countMoving > 0)
-                return;
-        
-            _isMoving = false;
-            PlayersFinished?.Invoke();
+            foreach (var coroutine in _moveCoroutines)
+            {
+                if (coroutine != null) StopCoroutine(coroutine);
+            }
+            _moveCoroutines.Clear();
+            _activeCoroutinesCount = 0;
         }
 
-        private IEnumerator MovePlayer(int mapIndex, Transform playerTransform, List<Transform> waypoints, float duration)
+        private IEnumerator MovePlayerRoutine(int mapIndex, Transform playerTransform, List<Transform> waypoints)
         {
-            if (waypoints == null || waypoints.Count == 0)
-            {
-                _countMoving--;
-                TryPlayersFinished();
-                yield break;
-            }
-    
-            int currentWaypointIndex = 0;
+            // Кэшируем количество точек
+            int waypointsCount = waypoints.Count;
 
-            while (currentWaypointIndex < waypoints.Count)
+            for (int i = 0; i < waypointsCount; i++)
             {
-                Transform startPoint = playerTransform;
-                Transform targetPoint = waypoints[currentWaypointIndex];
-
-                float elapsedTime = 0f;
-                Vector3 startPos = startPoint.position;
+                Transform targetPoint = waypoints[i];
+                Vector3 startPos = playerTransform.position;
                 Vector3 endPos = targetPoint.position;
+                float elapsedTime = 0f;
 
-                while (elapsedTime < duration)
+                // Движение к конкретной точке
+                while (elapsedTime < _duration)
                 {
-                    float t = elapsedTime / duration;
+                    elapsedTime += Time.deltaTime;
+                    float t = elapsedTime / _duration;
+                    
+                    // Используем SmoothStep для более приятного движения (опционально)
                     playerTransform.position = Vector3.Lerp(startPos, endPos, t);
-                    elapsedTime += UnityEngine.Time.deltaTime;
-                    yield return null;
+                    yield return null; 
                 }
 
                 playerTransform.position = endPos;
-                InPoint?.Invoke(mapIndex, waypoints[currentWaypointIndex]);
-                currentWaypointIndex++;
+                InPoint?.Invoke(mapIndex, targetPoint);
             }
 
-            _countMoving--;
-            TryPlayersFinished();
-            PlayerFinished?.Invoke();
+            OnPlayerReachedFinalPoint();
         }
+
+        private void OnPlayerReachedFinalPoint()
+        {
+            _activeCoroutinesCount--;
+            PlayerFinished?.Invoke();
+
+            if (_activeCoroutinesCount <= 0)
+            {
+                _activeCoroutinesCount = 0;
+                _isMoving = false;
+                _moveCoroutines.Clear();
+                PlayersFinished?.Invoke();
+            }
+        }
+        
+        private void OnDisable() => StopActiveCoroutines();
     }
 }

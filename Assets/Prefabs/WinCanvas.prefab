@@ -494,6 +494,38 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1222963688345375149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 4889278659337819894, guid: 7d85f61f1d4d86f40acf97250994d640, type: 3}
+  m_PrefabInstance: {fileID: 5990601108525778779}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7688584420368672753}
+  - component: {fileID: 1416304632905485955}
+  m_Layer: 0
+  m_Name: 'Crown (Missing Prefab with guid: 7d85f61f1d4d86f40acf97250994d640)'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7688584420368672753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 4148296003655622826, guid: 7d85f61f1d4d86f40acf97250994d640, type: 3}
+  m_PrefabInstance: {fileID: 5990601108525778779}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222963688345375149}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.17761971, y: -0, z: 0.000000014901159, w: 0.9840992}
+  m_LocalPosition: {x: -8, y: 170, z: -1161}
+  m_LocalScale: {x: 141.085, y: 141.085, z: 141.085}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6038320891001820739}
+  m_LocalEulerAnglesHint: {x: -20.462, y: 0, z: 0}
 --- !u!1 &2237661323267366480
 GameObject:
   m_ObjectHideFlags: 0
@@ -797,7 +829,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -4
   m_TargetDisplay: 0
 --- !u!114 &3375193391577108608
 MonoBehaviour:
@@ -6111,13 +6143,15 @@ ParticleSystemRenderer:
   m_RenderAlignment: 0
   m_Pivot: {x: 0, y: 0, z: 0}
   m_Flip: {x: 0, y: 0, z: 0}
-  m_UseCustomVertexStreams: 0
   m_EnableGPUInstancing: 1
   m_ApplyActiveColorSpace: 1
   m_AllowRoll: 1
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
+  m_UseCustomVertexStreams: 0
   m_VertexStreams: 00010304
+  m_UseCustomTrailVertexStreams: 0
+  m_TrailVertexStreams: 00010304
   m_Mesh: {fileID: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
@@ -6923,11 +6957,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1416304632905485955}
   m_SourcePrefab: {fileID: 100100000, guid: 7d85f61f1d4d86f40acf97250994d640, type: 3}
---- !u!1 &1222963688345375149 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4889278659337819894, guid: 7d85f61f1d4d86f40acf97250994d640, type: 3}
-  m_PrefabInstance: {fileID: 5990601108525778779}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &1416304632905485955
 Animator:
   serializedVersion: 5
@@ -6949,8 +6978,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!4 &7688584420368672753 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4148296003655622826, guid: 7d85f61f1d4d86f40acf97250994d640, type: 3}
-  m_PrefabInstance: {fileID: 5990601108525778779}
-  m_PrefabAsset: {fileID: 0}

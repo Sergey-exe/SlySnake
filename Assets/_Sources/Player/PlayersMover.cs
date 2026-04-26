@@ -8,6 +8,7 @@ namespace _Sources.Player
     public class PlayersMover : MonoBehaviour
     {
         [SerializeField] private PlayersWayBuilder _wayBuilder;
+        [SerializeField] private CameraShaker _cameraShaker;
         [SerializeField] private float _duration;
     
         private PlayersTransformData _playersTransformData;
@@ -97,6 +98,7 @@ namespace _Sources.Player
         {
             _activeCoroutinesCount--;
             PlayerFinished?.Invoke();
+            _cameraShaker.Shake();
 
             if (_activeCoroutinesCount <= 0)
             {

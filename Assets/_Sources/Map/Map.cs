@@ -55,9 +55,9 @@ namespace _Sources.Map
         {
             int[,] map = _mapData.GetCurrentMap();
         
-            for (int i = 0; i < map.GetLength(0) - 1; i++)
+            for (int i = 0; i < map.GetLength(0); i++)
             {
-                for (int j = 0; j < map.GetLength(1) - 1; j++)
+                for (int j = 0; j < map.GetLength(1); j++)
                 {
                     if(map[i, j] == (int)MapItemType.Player)
                         return new GameMapVector2(i, j);

@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Sources.Input;
 using UnityEngine;
 
 namespace _Sources.Player
 {
     public class PlayersMover : MonoBehaviour
     {
+        [SerializeField] private InputReader _inputReader;
         [SerializeField] private PlayersWayBuilder _wayBuilder;
         [SerializeField] private CameraShaker _cameraShaker;
         [SerializeField] private float _duration;
@@ -20,6 +22,18 @@ namespace _Sources.Player
         public event Action<int, Transform> InPoint;
         public event Action PlayersFinished;
         public event Action PlayerFinished;
+
+        private void OnEnable()
+        {
+            _inputReader.OnMove += TryStartMove;
+        }
+        
+        private void OnDisable()
+        {
+            _inputReader.OnMove -= TryStartMove;
+            
+            StopActiveCoroutines();
+        }
     
         public void Init(PlayersTransformData playersTransformData)
         {
@@ -41,15 +55,14 @@ namespace _Sources.Player
             {
                 List<Transform> waypoints = _wayBuilder.SearchWay(i, direction);
                 
-                // Если пути нет, сразу уменьшаем счетчик потенциальных корутин
-                if (waypoints == null || waypoints.Count == 0) continue;
+                if (waypoints == null || waypoints.Count == 0) 
+                    continue;
 
                 _activeCoroutinesCount++;
-                var coroutine = StartCoroutine(MovePlayerRoutine(i, _playersTransformData.GetTransform(i), waypoints));
+                var coroutine = StartCoroutine(MovePlayer(i, _playersTransformData.GetTransform(i), waypoints));
                 _moveCoroutines.Add(coroutine);
             }
-
-            // Если ни один игрок не смог начать движение
+            
             if (_activeCoroutinesCount == 0)
             {
                 _isMoving = false;
@@ -57,7 +70,7 @@ namespace _Sources.Player
             }
         }
 
-        private void StopActiveCoroutines()
+        public void StopActiveCoroutines()
         {
             foreach (var coroutine in _moveCoroutines)
                 if (coroutine != null) StopCoroutine(coroutine);
@@ -67,7 +80,7 @@ namespace _Sources.Player
             _isMoving = false;
         }
 
-        private IEnumerator MovePlayerRoutine(int mapIndex, Transform playerTransform, List<Transform> waypoints)
+        private IEnumerator MovePlayer(int mapIndex, Transform playerTransform, List<Transform> waypoints)
         {
             int waypointsCount = waypoints.Count;
 
@@ -108,7 +121,5 @@ namespace _Sources.Player
                 PlayersFinished?.Invoke();
             }
         }
-        
-        private void OnDisable() => StopActiveCoroutines();
     }
 }

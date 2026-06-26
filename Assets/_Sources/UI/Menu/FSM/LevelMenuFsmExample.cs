@@ -1,3 +1,4 @@
+using Assets.FSM;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace _Sources.UI.Menu.FSM
         
             _fsm.AddState(new FsmStateOpend(_fsm, _openMenu, _infoText));
             _fsm.AddState(new FsmStateClosed(_fsm,  _closedMenu, _hiddenElements));
-            _fsm.AddState(new FsmStateRestart(_fsm, _restartMenu, _infoText));
+            _fsm.AddState(new FsmStateRestart(_fsm, _restartMenu)); 
             _fsm.AddState(new FsmStateClosedOrAd(_fsm, _adMenu, _infoText));
         
             _fsm.SetState<FsmStateClosed>();
@@ -29,6 +30,9 @@ namespace _Sources.UI.Menu.FSM
         public void ChangeState(LevelOpeningType levelOpeningType)
         {
             if(_fsm == null)
+                return;
+            
+            if(_fsm.CurrentState is FsmStateRestart)
                 return;
         
             switch (levelOpeningType)

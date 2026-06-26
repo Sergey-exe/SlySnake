@@ -1,6 +1,7 @@
 using _Sources.GameControllers.FSM;
 using _Sources.Input;
 using _Sources.Map;
+using _Sources.Player;
 using _Sources.TimeManagement;
 using _Sources.TimeManagement;
 using _Sources.UI;
@@ -19,6 +20,7 @@ namespace _Sources.GameControllers
         [SerializeField] private LevelStateChanger _levelStateChanger;
         [SerializeField] private LevelMenu _levelMenu;
         [SerializeField] private LevelTimeCounter _levelTimeCounter;
+        [SerializeField] private PlayersMover _playersMover;
         
         [SerializeField] private GameStateFsmExample _fsmExample;
     
@@ -77,6 +79,7 @@ namespace _Sources.GameControllers
             _gameStateHandler.Revert();
             _levelStateChanger.Restart();
             _levelTimeCounter.Revert();
+            _playersMover.StopActiveCoroutines();
             
             Run();
         }
@@ -85,6 +88,7 @@ namespace _Sources.GameControllers
         {
             YG2.InterstitialAdvShow();
             
+            _levelTimeCounter.SaveTime(_levelStateChanger.CurrentLevelIndex);
             _levelStateChanger.Next();
             _levelTimeCounter.Revert();
             
@@ -98,6 +102,7 @@ namespace _Sources.GameControllers
             _levelStateChanger.Remove();
             _gameStateHandler.Revert();
             _levelTimeCounter.Revert();
+            _playersMover.StopActiveCoroutines();
             _fsmExample.ChangeState(GameStates.Menu);
         }
 

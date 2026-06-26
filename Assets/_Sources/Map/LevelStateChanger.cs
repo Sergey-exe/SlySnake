@@ -8,6 +8,8 @@ namespace _Sources.Map
         [SerializeField] private MapSpawner _mapSpawner;
         [SerializeField] private PlayersSpawner _playersSpawner;
 
+        public int CurrentLevelIndex => _mapSpawner.CurrentLevelIndex;
+
         public void Launch()
         {
             _mapSpawner.SpawnMap();

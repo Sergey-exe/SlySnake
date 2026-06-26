@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using _Sources.Map;
 using _Sources.UI.Menu.FSM;
+using YG; // Используем чисто для чтения статических данных
 using UnityEngine;
 
 namespace _Sources.UI.Menu
@@ -39,8 +39,8 @@ namespace _Sources.UI.Menu
             _mapSpawner.OnNextLevel -= ChangeState;
             _mapSpawner.IsGotToAd -= ChangeStateToIndex;
         }
-
-        public async Task Init()
+        
+        public void Init()
         {
             foreach (var item in _items)
             {
@@ -48,11 +48,43 @@ namespace _Sources.UI.Menu
                 {
                     example.Init(); 
                 }
-                
-                await Task.Yield(); 
             }
-
+            
+            LoadSaves();
             UpdateOpeningTypes();
+        }
+
+        public void LoadSaves()
+        {
+            foreach (var index in YG2.saves.RestartLevelsIndexes)
+                _items[index].ChangeOpeningType(LevelOpeningType.Restart);
+            
+            foreach (var index in YG2.saves.ClosedOrADLevelsIndexes)
+                _items[index].ChangeOpeningType(LevelOpeningType.ClosedOrAD);
+            
+            _items[YG2.saves.CurrentLevelIndex].ChangeOpeningType(LevelOpeningType.Open);
+            
+            CurrentLevelIndex = YG2.saves.CurrentLevelIndex;
+        }
+
+        public void Save(int index, LevelOpeningType openingType)
+        {
+            switch (openingType)
+            {
+                case LevelOpeningType.Restart:
+                    YG2.saves.RestartLevelsIndexes.Add(index);
+                    break;
+                
+                case LevelOpeningType.ClosedOrAD:
+                    YG2.saves.ClosedOrADLevelsIndexes.Add(index);
+                    break;
+                
+                case LevelOpeningType.Open:
+                    YG2.saves.CurrentLevelIndex = index;
+                    break;
+            }
+            
+            YG2.SaveProgress();
         }
         
         public void Play(int levelIndex)
@@ -64,7 +96,6 @@ namespace _Sources.UI.Menu
         public void PlayAfterAD(int levelIndex)
         {
             Play(levelIndex);
-            
             UpdateOpeningTypes();
         }
 
@@ -76,9 +107,13 @@ namespace _Sources.UI.Menu
                 {
                     _items[i].ChangeOpeningType(LevelOpeningType.Open);
                     CurrentLevelIndex = i;
+                    Save(i, LevelOpeningType.Open);
 
-                    _items[i - step].ChangeOpeningType(LevelOpeningType.Restart);
-                
+                    int nextIndex = i - step;
+                    _items[nextIndex].ChangeOpeningType(LevelOpeningType.Restart);
+                    Save(nextIndex, LevelOpeningType.Restart);
+                    _items[nextIndex].SetBestTime();
+                    
                     break;
                 }
             }
@@ -101,7 +136,7 @@ namespace _Sources.UI.Menu
                 }
                 else
                 {
-                    Debug.LogWarning($"Объект UI не имеект компонент {nameof(LevelMenuFsmExample)}");
+                    Debug.LogWarning($"Объект UI не имеет компонент {nameof(LevelMenuFsmExample)}");
                 }
             }
         }

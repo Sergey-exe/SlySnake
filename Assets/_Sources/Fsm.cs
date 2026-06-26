@@ -7,11 +7,11 @@ public abstract class Fsm
 {
     private Dictionary<Type, FsmState> _states = new();
     
-    private FsmState StateCurrent { get; set; }
+    public FsmState CurrentState { get; private set; }
 
     public void Update()
     {
-        StateCurrent?.Update();
+        CurrentState?.Update();
     }
 
     public void AddState(FsmState state)
@@ -23,14 +23,14 @@ public abstract class Fsm
     {
         var type = typeof(T);
         
-        if(StateCurrent != null && StateCurrent.GetType() == type)
+        if(CurrentState != null && CurrentState.GetType() == type)
             return;
 
         if (_states.TryGetValue(type, out var newState))
         {
-            StateCurrent?.Exit();
-            StateCurrent = newState;
-            StateCurrent.Enter();
+            CurrentState?.Exit();
+            CurrentState = newState;
+            CurrentState.Enter();
         }
     }
 }

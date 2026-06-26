@@ -1,0 +1,24 @@
+{
+    "intExample": 5,
+    "strExample": "Hello!",
+    "boolExample": [
+        false,
+        false,
+        false,
+        false
+    ],
+    "idSave": 65,
+    "BestLevelsTimeKeys": [],
+    "BestLevelsTimeValues": [],
+    "RestartLevelsIndexes": [],
+    "ClosedOrADLevelsIndexes": [],
+    "CurrentLevelIndex": 0,
+    "MasterVolume": 1.0,
+    "MasterMute": false,
+    "MusicVolume": 0.505018413066864,
+    "MusicMute": false,
+    "SoundsVolume": 0.48164498805999758,
+    "SoundsMute": false,
+    "UIVolume": 0.4755268692970276,
+    "UIVomute": false
+}

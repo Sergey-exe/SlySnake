@@ -11,6 +11,7 @@ namespace _Sources.TimeManagement
         [SerializeField] private LevelTimeViewer _levelTimeViewer;
         [SerializeField] private float _timeStep;
         
+        private LevelBestTimeSaver _levelBestTimeSaver;
         private Coroutine _timeCoroutine;
         private WaitForSeconds _waitForSeconds;
         private bool _isInit;
@@ -21,6 +22,7 @@ namespace _Sources.TimeManagement
         public void Init()
         {
             _waitForSeconds = new WaitForSeconds(_timeStep);
+            _levelBestTimeSaver =  new LevelBestTimeSaver();
             
             _isInit = true;
         }
@@ -60,6 +62,11 @@ namespace _Sources.TimeManagement
         public void Revert()
         {
             GameTime = 0;
+        }
+
+        public void SaveTime(int index)
+        {
+            _levelBestTimeSaver.SaveTime(GameTime, index);
         }
 
         private IEnumerator TimeCoroutine()

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using YG;
 
 namespace _Sources.UI.Menu
 {
@@ -35,6 +36,7 @@ namespace _Sources.UI.Menu
 
         private void Start()
         {
+            SelectedTabIndex = YG2.saves.CurrentLevelIndex;
             Recalculate();
         }
 

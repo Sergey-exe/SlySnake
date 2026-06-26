@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class CameraFocuser : MonoBehaviour
 {
-    [SerializeField] private Camera Camera;
-    [SerializeField] private float Padding = 1f;
-    [SerializeField] private float MinOrthographicSize = 5f;
-    [SerializeField] private float MaxOrthographicSize = 50f;
-    [SerializeField] private float CameraZOffset = -10f;
+    [SerializeField] private Camera _camera;
+    [SerializeField] private float _padding = 1f;
+    [SerializeField] private float _minOrthographicSize = 5f;
+    [SerializeField] private float _maxOrthographicSize = 50f;
+    [SerializeField] private float _cameraZOffset = -10f;
 
     public void FocusCameraOnItems(List<Transform> items)
     {
@@ -22,7 +22,7 @@ public class CameraFocuser : MonoBehaviour
         
         
         Vector3 center = sumPositions / items.Count;
-        center.z = CameraZOffset;
+        center.z = _cameraZOffset;
 
         float maxDistance = 0f;
         
@@ -35,7 +35,7 @@ public class CameraFocuser : MonoBehaviour
                 maxDistance = dist;
         }
         
-        float radius = maxDistance + Padding;
+        float radius = maxDistance + _padding;
         
         float aspectRatio = (float)Screen.width / Screen.height;
         
@@ -43,9 +43,9 @@ public class CameraFocuser : MonoBehaviour
         float sizeBasedOnRadiusHorizontal = radius / aspectRatio;
         float requiredSize = Mathf.Max(sizeBasedOnRadiusVertical, sizeBasedOnRadiusHorizontal);
         
-        requiredSize = Mathf.Clamp(requiredSize, MinOrthographicSize, MaxOrthographicSize);
+        requiredSize = Mathf.Clamp(requiredSize, _minOrthographicSize, _maxOrthographicSize);
         
-        Camera.transform.position = center;
-        Camera.orthographicSize = requiredSize;
+        _camera.transform.position = center;
+        _camera.orthographicSize = requiredSize;
     }
 }

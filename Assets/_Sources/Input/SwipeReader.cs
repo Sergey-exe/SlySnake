@@ -50,17 +50,18 @@ namespace _Sources.Input
             if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
             {
                 if (direction.x > 0)
-                    _inputReader.OnMove(new GameMapVector2(0, _step));
+                    _inputReader.SendMoveCommand(new GameMapVector2(0, _step));
                 else
-                    _inputReader.OnMove(new GameMapVector2(0, -_step));
+                    _inputReader.SendMoveCommand(new GameMapVector2(0, -_step));
             }
             else
             {
                 if (direction.y > 0)
-                    _inputReader.OnMove(new GameMapVector2(-_step, 0));
+                    _inputReader.SendMoveCommand(new GameMapVector2(-_step, 0));
                 else
-                    _inputReader.OnMove(new GameMapVector2(_step, 0));
+                    _inputReader.SendMoveCommand(new GameMapVector2(_step, 0));
             }
         }
+
     }
 }

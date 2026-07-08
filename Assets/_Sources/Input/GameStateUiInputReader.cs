@@ -13,9 +13,6 @@ namespace _Sources.Input
         [SerializeField] private Button[] _pauseButtons;
         [SerializeField] private Button[] _runButtons;
         [SerializeField] private Button[] _menuButtons;
-        
-        [SerializeField] private MapSpawner _mapSpawner;
-        [SerializeField] private PlayersSpawner _playersSpawner;
 
         public event Action IsRestart;
         public event Action IsNextLevel;

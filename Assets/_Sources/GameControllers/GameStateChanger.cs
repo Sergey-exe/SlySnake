@@ -20,6 +20,7 @@ namespace _Sources.GameControllers
         [SerializeField] private LevelStateChanger _levelStateChanger;
         [SerializeField] private LevelMenu _levelMenu;
         [SerializeField] private LevelTimeCounter _levelTimeCounter;
+        [SerializeField] private LevelBestScoreCalculator _scoreCalculator;
         [SerializeField] private PlayersMover _playersMover;
         
         [SerializeField] private GameStateFsmExample _fsmExample;
@@ -89,6 +90,7 @@ namespace _Sources.GameControllers
             YG2.InterstitialAdvShow();
             
             _levelTimeCounter.SaveTime(_levelStateChanger.CurrentLevelIndex);
+
             _levelStateChanger.Next();
             _levelTimeCounter.Revert();
             

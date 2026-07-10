@@ -22,11 +22,11 @@ public class GameStateFsmExample : MonoBehaviour
     
     private Fsm _fsm;
 
-    public void Init()
+    public void Init(ITimeCounter timeCounter)
     {
         _fsm = new GameStatesFsm();
         
-        _fsm.AddState(new FsmStateGame(_gameWindow, _inputReader, _levelTimeCounter, _fsm));
+        _fsm.AddState(new FsmStateGame(_gameWindow, _inputReader, timeCounter, _fsm));
         _fsm.AddState(new FsmStateGameOver(_endWindow, _miniMapPainter, _fsm));
         _fsm.AddState(new FsmStateGameWin(_winWindow, _fsm));
         _fsm.AddState(new FsmStatePause(_pauseWindow,  _fsm));

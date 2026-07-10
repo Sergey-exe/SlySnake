@@ -10,9 +10,9 @@ namespace _Sources.GameControllers.FSM
     {
         private GameObject _gameWindow;
         private InputReader _inputReader;
-        private LevelTimeCounter _levelTimeCounter;
+        private ITimeCounter _levelTimeCounter;
 
-        public FsmStateGame(GameObject gameWindow, InputReader inputReader, LevelTimeCounter levelTimeCounter, Fsm fsm) : base(fsm)
+        public FsmStateGame(GameObject gameWindow, InputReader inputReader, ITimeCounter levelTimeCounter, Fsm fsm) : base(fsm)
         {
             _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
             _levelTimeCounter = levelTimeCounter ?? throw new ArgumentNullException(nameof(levelTimeCounter));

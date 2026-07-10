@@ -7,12 +7,21 @@
         false,
         false
     ],
-    "idSave": 6,
-    "BestLevelsTimeKeys": [],
-    "BestLevelsTimeValues": [],
-    "RestartLevelsIndexes": [],
+    "idSave": 12,
+    "BestLevelsTimeKeys": [
+        0,
+        1
+    ],
+    "BestLevelsTimeValues": [
+        3.0,
+        21.0
+    ],
+    "RestartLevelsIndexes": [
+        0,
+        1
+    ],
     "ClosedOrADLevelsIndexes": [],
-    "CurrentLevelIndex": 0,
+    "CurrentLevelIndex": 2,
     "MasterVolume": 1.0,
     "MasterMute": false,
     "MusicVolume": 0.5,

@@ -7,5 +7,6 @@
         Win,
         Lose,
         Menu,
+        Reset,
     }
 }

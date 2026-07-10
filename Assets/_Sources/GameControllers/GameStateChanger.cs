@@ -19,11 +19,12 @@ namespace _Sources.GameControllers
         [SerializeField] private GameStateUiInputReader _gameUiInputReader;
         [SerializeField] private LevelStateChanger _levelStateChanger;
         [SerializeField] private LevelMenu _levelMenu;
-        [SerializeField] private LevelTimeCounter _levelTimeCounter;
-        [SerializeField] private LevelBestScoreCalculator _scoreCalculator;
         [SerializeField] private PlayersMover _playersMover;
         
         [SerializeField] private GameStateFsmExample _fsmExample;
+        
+        private ITimeReset _timeReset;
+        private ITimeSaver _timeSaver;
     
         private bool _isPaused = false;
     
@@ -49,9 +50,12 @@ namespace _Sources.GameControllers
             _levelMenu.OnStart -= Launch;
         }
 
-        private void Start()
+        public void Init(ITimeReset levelTimeReset, ITimeSaver timeSaver, ITimeCounter timeCounter)
         {
-            _fsmExample.Init();
+            _fsmExample.Init(timeCounter);
+            
+            _timeReset = levelTimeReset;
+            _timeSaver = timeSaver;
         }
 
         public void Launch()
@@ -79,7 +83,7 @@ namespace _Sources.GameControllers
             
             _gameStateHandler.Revert();
             _levelStateChanger.Restart();
-            _levelTimeCounter.Revert();
+            _timeReset.ResetTime();
             _playersMover.StopActiveCoroutines();
             
             Run();
@@ -89,10 +93,10 @@ namespace _Sources.GameControllers
         {
             YG2.InterstitialAdvShow();
             
-            _levelTimeCounter.SaveTime(_levelStateChanger.CurrentLevelIndex);
+            _timeSaver.SaveTime(_levelStateChanger.CurrentLevelIndex);
 
             _levelStateChanger.Next();
-            _levelTimeCounter.Revert();
+            _timeReset.ResetTime();
             
             Run();
         }
@@ -103,7 +107,7 @@ namespace _Sources.GameControllers
             
             _levelStateChanger.Remove();
             _gameStateHandler.Revert();
-            _levelTimeCounter.Revert();
+            _timeReset.ResetTime();
             _playersMover.StopActiveCoroutines();
             _fsmExample.ChangeState(GameStates.Menu);
         }

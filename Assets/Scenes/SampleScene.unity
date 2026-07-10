@@ -4170,6 +4170,7 @@ GameObject:
   - component: {fileID: 519420038}
   - component: {fileID: 519420045}
   - component: {fileID: 519420050}
+  - component: {fileID: 519420051}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -4290,7 +4291,6 @@ MonoBehaviour:
   _gameUiInputReader: {fileID: 519420040}
   _levelStateChanger: {fileID: 519420044}
   _levelMenu: {fileID: 1912101049}
-  _levelTimeCounter: {fileID: 884803280}
   _playersMover: {fileID: 1593078256}
   _fsmExample: {fileID: 519420045}
 --- !u!114 &519420037
@@ -4371,6 +4371,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab655e07b5385d540b2095a3242f3ec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameStateChanger: {fileID: 519420036}
+  _timeRoot: {fileID: 519420051}
   _levelSequence: {fileID: 286771977}
   _inputReader: {fileID: 519420033}
   _cameraFocuser: {fileID: 519420035}
@@ -4473,6 +4475,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cleanButton: {fileID: 2131733279}
+--- !u!114 &519420051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ad6fabfe2f412a806196450fb4a084, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levelTimeViewer: {fileID: 884803281}
+  _levelTimeCounter: {fileID: 884803280}
 --- !u!1 &522632604
 GameObject:
   m_ObjectHideFlags: 0
@@ -6770,7 +6786,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9407176b47c687d419271fdc81c78e13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _levelTimeViewer: {fileID: 884803281}
   _timeStep: 1
 --- !u!114 &884803281
 MonoBehaviour:

@@ -43,9 +43,7 @@ namespace _Sources.UI.Menu
             foreach (var item in _items)
             {
                 if (item.TryGetComponent(out LevelMenuFsmExample example))
-                {
                     example.Init(); 
-                }
             }
             
             LoadSaves();

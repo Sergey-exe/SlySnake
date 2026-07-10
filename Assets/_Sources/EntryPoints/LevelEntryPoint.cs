@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using _Sources.GameControllers;
 using UnityEngine;
 using _Sources.Input;
 using _Sources.Map;
@@ -7,20 +7,20 @@ using _Sources.Player;
 
 public class LevelEntryPoint : MonoBehaviour
 {
-    [Header("Core Systems")]
+    [SerializeField] private GameStateChanger  _gameStateChanger;
+    [SerializeField] private TimeRoot _timeRoot;
+    
     [SerializeField] private LevelSequence _levelSequence;
 
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private CameraFocuser _cameraFocuser;
     [SerializeField] private LevelTimeCounter _levelTimeCounter;
     [SerializeField] private LevelStateChanger _levelStateChanger;
-
-    [Header("Player Systems")]
+    
     [SerializeField] private PlayersMover _playersMover;
     [SerializeField] private PlayersSpawner _playersSpawner;
     [SerializeField] private PlayersWayBuilder _wayBuilder;
-
-    [Header("Map Dependencies (For Generator)")]
+    
     [SerializeField] private MapFactory _mapFactory;
     [SerializeField] private MapsProgressCollection _mapsProgressCollection;
     [SerializeField] private MapItemChanger _mapItemChanger;
@@ -54,7 +54,9 @@ public class LevelEntryPoint : MonoBehaviour
             _mapItemChanger,
             _mapFactory
         );
-
+        
+        _timeRoot.Root();
+        _gameStateChanger.Init(_timeRoot.LevelTimeHandler, _timeRoot.LevelTimeHandler, _timeRoot.LevelTimeHandler);
         _levelStateChanger.Init(_mapHandler);
         _playersSpawner.Init(playersTransformData);
         _playersMover.Init(playersTransformData);

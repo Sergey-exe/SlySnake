@@ -8,21 +8,20 @@ namespace _Sources.TimeManagement
 {
     public class LevelTimeCounter : MonoBehaviour
     {
-        [SerializeField] private LevelTimeViewer _levelTimeViewer;
         [SerializeField] private float _timeStep;
         
-        private LevelBestTimeSaver _levelBestTimeSaver;
         private Coroutine _timeCoroutine;
         private WaitForSeconds _waitForSeconds;
         private bool _isInit;
         private bool _isActive;
+        
+        public event Action<float> OnTimeChanged;
     
         public float GameTime { get; private set; }
 
         public void Init()
         {
             _waitForSeconds = new WaitForSeconds(_timeStep);
-            _levelBestTimeSaver =  new LevelBestTimeSaver();
             
             _isInit = true;
         }
@@ -44,7 +43,6 @@ namespace _Sources.TimeManagement
                 return;
             
             _timeCoroutine = StartCoroutine(TimeCoroutine());
-            _levelTimeViewer.ShowTimers();
         }
 
         public void StopCounting()
@@ -56,17 +54,11 @@ namespace _Sources.TimeManagement
                 StopCoroutine(_timeCoroutine);
             
             _timeCoroutine = null;
-            _levelTimeViewer.HideTimers();
         }
 
         public void Revert()
         {
             GameTime = 0;
-        }
-
-        public void SaveTime(int index)
-        {
-            _levelBestTimeSaver.SaveTime(GameTime, index);
         }
 
         private IEnumerator TimeCoroutine()
@@ -76,7 +68,7 @@ namespace _Sources.TimeManagement
             while (_isActive)
             {
                 GameTime += _timeStep;
-                _levelTimeViewer.ShowTime(GameTime);
+                OnTimeChanged?.Invoke(GameTime);
                 
                 yield return wait;
             }

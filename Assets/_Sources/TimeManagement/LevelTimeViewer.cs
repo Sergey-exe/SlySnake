@@ -13,15 +13,7 @@ namespace _Sources.TimeManagement
     
         public void ShowTime(float currentTimeSeconds)
         {
-            float minutes = Mathf.Floor(currentTimeSeconds / SecondsInMinutes);
-            float seconds = currentTimeSeconds % SecondsInMinutes;
-        
-            string formattedTime = $"{minutes:0}.{seconds:0}";
-        
-            foreach (var text in _timeTexts)
-            {
-                text.text = formattedTime;
-            }
+            UpdateTexts(FormatTime(currentTimeSeconds));
         }
 
         public void ShowTimers()
@@ -34,6 +26,20 @@ namespace _Sources.TimeManagement
         {
             foreach (var timer in _timers)
                 timer.SetActive(false);
+        }
+
+        private string FormatTime(float currentTimeSeconds)
+        {
+            float minutes = Mathf.Floor(currentTimeSeconds / SecondsInMinutes);
+            float seconds = currentTimeSeconds % SecondsInMinutes;
+        
+            return $"{minutes:0}.{seconds:0}";
+        }
+        
+        private void UpdateTexts(string timeText)
+        {
+            foreach (var text in _timeTexts)
+                text.text = timeText;
         }
     }
 }

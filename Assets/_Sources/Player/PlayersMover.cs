@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Sources.Player
 {
-    public class PlayersMover : MonoBehaviour
+    public class PlayersMover : MonoBehaviour, IMoveStopper
     {
         [SerializeField] private InputReader _inputReader;
         [SerializeField] private PlayersWayBuilder _wayBuilder;
@@ -122,4 +122,9 @@ namespace _Sources.Player
             }
         }
     }
+}
+
+public interface IMoveStopper
+{
+    void StopActiveCoroutines();
 }

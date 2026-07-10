@@ -7,12 +7,4 @@
             LevelTimeDataBroker.TrySaveNewRecord(index, time);
         }
     }
-    
-    public class LevelBestScoreSaver
-    {
-        public void SaveTime(float score, int index)
-        {
-            //LevelTimeDataBroker.TrySaveNewRecord(index, score);
-        }
-    }
 }

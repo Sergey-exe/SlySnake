@@ -7,33 +7,18 @@
         false,
         false
     ],
-    "idSave": 141,
-    "BestLevelsTimeKeys": [
-        0,
-        1,
-        2
-    ],
-    "BestLevelsTimeValues": [
-        3.0,
-        2.0,
-        4.0
-    ],
-    "RestartLevelsIndexes": [
-        0,
-        1,
-        2,
-        2
-    ],
-    "ClosedOrADLevelsIndexes": [
-        3
-    ],
-    "CurrentLevelIndex": 4,
+    "idSave": 6,
+    "BestLevelsTimeKeys": [],
+    "BestLevelsTimeValues": [],
+    "RestartLevelsIndexes": [],
+    "ClosedOrADLevelsIndexes": [],
+    "CurrentLevelIndex": 0,
     "MasterVolume": 1.0,
     "MasterMute": false,
-    "MusicVolume": 0.505018413066864,
+    "MusicVolume": 0.5,
     "MusicMute": false,
-    "SoundsVolume": 0.48164498805999758,
+    "SoundsVolume": 0.4238385856151581,
     "SoundsMute": false,
-    "UIVolume": 0.4755268692970276,
+    "UIVolume": 0.5,
     "UIVomute": false
 }

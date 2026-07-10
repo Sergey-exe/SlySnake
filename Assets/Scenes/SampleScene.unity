@@ -2457,9 +2457,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 286771973}
-  - component: {fileID: 286771972}
   - component: {fileID: 286771977}
-  - component: {fileID: 286771976}
   - component: {fileID: 286771978}
   - component: {fileID: 286771979}
   - component: {fileID: 286771974}
@@ -2471,25 +2469,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &286771972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286771971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d29bd873b2a64ecf8494c38df1bbb7b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _sequence: {fileID: 286771977}
-  _mapsProgressCollection: {fileID: 777301288}
-  _mapFactory: {fileID: 286771978}
-  _environmentPresenter: {fileID: 286771979}
-  _playersSpawner: {fileID: 271694648}
-  _wayBuilder: {fileID: 1593078255}
-  _mapItemChanger: {fileID: 777301287}
 --- !u!4 &286771973
 Transform:
   m_ObjectHideFlags: 0
@@ -2544,24 +2523,6 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: d2c397db024e8384ba6965045c10c48d, type: 2}
     - Key: 0
       Value: {fileID: 11400000, guid: b7c85bc83e8fb3340904884f292727d0, type: 2}
---- !u!114 &286771976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 286771971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62f8791e75ae49368d864675ac0fff04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _mapItemPrefab: {fileID: 175110260196331374, guid: 857dd95e7b23d1041b71629a4ad23870, type: 3}
-  _mapsCollector: {fileID: 777301286}
-  _spriteSetsData: {fileID: 286771974}
-  _environmentSetsData: {fileID: 286771975}
-  _camera: {fileID: 519420031}
-  _soundChanger: {fileID: 1226703800}
 --- !u!114 &286771977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4397,7 +4358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25a923d74f5bb5141a32508133b591f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startLevelUI: {fileID: 0}
   _levelMenu: {fileID: 1912101049}
 --- !u!114 &519420042
 MonoBehaviour:
@@ -4411,13 +4371,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab655e07b5385d540b2095a3242f3ec5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playersMover: {fileID: 1593078256}
-  _playersSpawner: {fileID: 271694648}
-  playersWayBuilder: {fileID: 1593078255}
-  _mapSpawner: {fileID: 286771972}
+  _levelSequence: {fileID: 286771977}
   _inputReader: {fileID: 519420033}
   _cameraFocuser: {fileID: 519420035}
   _levelTimeCounter: {fileID: 884803280}
+  _levelStateChanger: {fileID: 519420044}
+  _playersMover: {fileID: 1593078256}
+  _playersSpawner: {fileID: 271694648}
+  _wayBuilder: {fileID: 1593078255}
+  _mapFactory: {fileID: 286771978}
+  _mapsProgressCollection: {fileID: 777301288}
+  _mapItemChanger: {fileID: 777301287}
+  _environmentPresenter: {fileID: 286771979}
 --- !u!114 &519420043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4444,7 +4409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29b74976dcf2139498cc24d5fc15736e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapSpawner: {fileID: 286771972}
   _playersSpawner: {fileID: 271694648}
 --- !u!114 &519420045
 MonoBehaviour:

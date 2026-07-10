@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Sources.Map;
 using _Sources.UI.Menu.FSM;
-using YG; // Используем чисто для чтения статических данных
+using YG;
 using UnityEngine;
 
 namespace _Sources.UI.Menu

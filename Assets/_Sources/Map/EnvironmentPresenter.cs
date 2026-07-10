@@ -15,9 +15,10 @@ public class EnvironmentPresenter : MonoBehaviour
         _camera.backgroundColor = config.BackgroundColor;
         _soundChanger.ChangeSound(config.BackgroundSound);
 
-        foreach (var obj in config.SpecialObjects)
+        foreach (var gameObject in config.SpecialObjects)
         {
-            if (obj != null) Instantiate(obj, _mapsCollector);
+            if (gameObject != null)
+                Instantiate(gameObject, _mapsCollector);
         }
     }
 

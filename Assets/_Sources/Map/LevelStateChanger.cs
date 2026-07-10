@@ -5,32 +5,38 @@ namespace _Sources.Map
 {
     public class LevelStateChanger : MonoBehaviour
     {
-        [SerializeField] private MapSpawner _mapSpawner;
         [SerializeField] private PlayersSpawner _playersSpawner;
+        
+        private MapHandler _mapHandler;
 
-        public int CurrentLevelIndex => _mapSpawner.CurrentLevelIndex;
+        public int CurrentLevelIndex => _mapHandler.CurrentLevelIndex;
+
+        public void Init(MapHandler mapHandler)
+        {
+            _mapHandler = mapHandler;
+        }
 
         public void Launch()
         {
-            _mapSpawner.SpawnMap();
+            _mapHandler.LoadCurrentLevel();
         }
     
         public void Restart()
         {
             _playersSpawner.Revert();
-            _mapSpawner.RestartLevel();
+            _mapHandler.RestartLevel();
         }
 
         public void Remove()
         {
             _playersSpawner.Revert();
-            _mapSpawner.Revert(true);
+            _mapHandler.Revert(true);
         }
 
         public void Next()
         {
             _playersSpawner.Revert();
-            _mapSpawner.NextLevel();
+            _mapHandler.NextLevel();
         }
     }
 }

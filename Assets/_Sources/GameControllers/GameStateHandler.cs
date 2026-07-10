@@ -21,6 +21,12 @@ public class GameStateHandler : MonoBehaviour
     {
         _playersMover.PlayersFinished -= TryInvokeState;
     }
+    
+    public void Revert()
+    {
+        _mechanismsProgressHandler.Revert();
+        _mapsProgressCollection.Revert();
+    }
 
     private void TryInvokeState()
     {
@@ -40,11 +46,5 @@ public class GameStateHandler : MonoBehaviour
         }
         
         IsVin?.Invoke(isVin);
-    }
-    
-    public void Revert()
-    {
-        _mechanismsProgressHandler.Revert();
-        _mapsProgressCollection.Revert();
     }
 }

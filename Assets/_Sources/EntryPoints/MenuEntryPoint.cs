@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class MenuEntryPoint : MonoBehaviour
 {
-    [SerializeField] private StartLevelUI _startLevelUI;
     [SerializeField] private LevelMenu _levelMenu;
     
     public void Init()

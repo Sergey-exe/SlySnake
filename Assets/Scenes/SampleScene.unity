@@ -2458,6 +2458,10 @@ GameObject:
   m_Component:
   - component: {fileID: 286771973}
   - component: {fileID: 286771972}
+  - component: {fileID: 286771977}
+  - component: {fileID: 286771976}
+  - component: {fileID: 286771978}
+  - component: {fileID: 286771979}
   - component: {fileID: 286771974}
   - component: {fileID: 286771975}
   m_Layer: 0
@@ -2479,17 +2483,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d29bd873b2a64ecf8494c38df1bbb7b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _mapItemPrefab: {fileID: 175110260196331374, guid: 857dd95e7b23d1041b71629a4ad23870, type: 3}
-  _mapsCollector: {fileID: 777301286}
+  _sequence: {fileID: 286771977}
+  _mapsProgressCollection: {fileID: 777301288}
+  _mapFactory: {fileID: 286771978}
+  _environmentPresenter: {fileID: 286771979}
   _playersSpawner: {fileID: 271694648}
   _wayBuilder: {fileID: 1593078255}
   _mapItemChanger: {fileID: 777301287}
-  _mapsProgressCollection: {fileID: 777301288}
-  _levels: {fileID: 11400000, guid: 5b8579e4a47cbf543bc14a15eb02813f, type: 2}
-  _spriteSetsData: {fileID: 286771974}
-  _environmentSetsData: {fileID: 286771975}
-  _camera: {fileID: 519420031}
-  _soundChanger: {fileID: 1226703800}
 --- !u!4 &286771973
 Transform:
   m_ObjectHideFlags: 0
@@ -2544,6 +2544,68 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: d2c397db024e8384ba6965045c10c48d, type: 2}
     - Key: 0
       Value: {fileID: 11400000, guid: b7c85bc83e8fb3340904884f292727d0, type: 2}
+--- !u!114 &286771976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286771971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f8791e75ae49368d864675ac0fff04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapItemPrefab: {fileID: 175110260196331374, guid: 857dd95e7b23d1041b71629a4ad23870, type: 3}
+  _mapsCollector: {fileID: 777301286}
+  _spriteSetsData: {fileID: 286771974}
+  _environmentSetsData: {fileID: 286771975}
+  _camera: {fileID: 519420031}
+  _soundChanger: {fileID: 1226703800}
+--- !u!114 &286771977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286771971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27f3aa1567c346ec9343b7585ffcb559, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _levels: {fileID: 11400000, guid: 5b8579e4a47cbf543bc14a15eb02813f, type: 2}
+--- !u!114 &286771978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286771971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2eaf125618cd3b246b869eb9bf15ebee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mapItemPrefab: {fileID: 175110260196331374, guid: 857dd95e7b23d1041b71629a4ad23870, type: 3}
+  _mapsCollector: {fileID: 777301286}
+  _spriteSetsData: {fileID: 286771974}
+--- !u!114 &286771979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286771971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7de5dd83a124445aebcf6467cc56f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _camera: {fileID: 519420031}
+  _soundChanger: {fileID: 1226703800}
+  _environmentSetsData: {fileID: 286771975}
+  _mapsCollector: {fileID: 777301286}
 --- !u!1 &293620370
 GameObject:
   m_ObjectHideFlags: 0
@@ -4323,8 +4385,6 @@ MonoBehaviour:
   _menuButtons:
   - {fileID: 1640511369}
   - {fileID: 1577200656}
-  _mapSpawner: {fileID: 286771972}
-  _playersSpawner: {fileID: 271694648}
 --- !u!114 &519420041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14097,7 +14157,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1912101051}
   - component: {fileID: 1912101049}
-  - component: {fileID: 1912101048}
   m_Layer: 0
   m_Name: MenuMenagerUI
   m_TagString: Untagged
@@ -14105,20 +14164,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1912101048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1912101047}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d3ec4e3c97df53469aebefb06d61c21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spawner: {fileID: 286771972}
-  _spawnPoint: {fileID: 1863162185}
 --- !u!114 &1912101049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14137,7 +14182,7 @@ MonoBehaviour:
   - {fileID: 2006670073}
   - {fileID: 1799131161}
   - {fileID: 796668049}
-  _mapSpawner: {fileID: 286771972}
+  _sequence: {fileID: 286771977}
 --- !u!4 &1912101051
 Transform:
   m_ObjectHideFlags: 0

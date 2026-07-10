@@ -16,10 +16,9 @@ public class LevelEntryPoint : MonoBehaviour
     
     public void Init()
     {
-        MapData mapData = new MapData();
         PlayersTransformData playersTransformData = new PlayersTransformData();
         
-        _mapSpawner.Init(mapData);
+        _mapSpawner.Init();
         _playersSpawner.Init(playersTransformData);
         _playersMover.Init(playersTransformData);
         _inputReader.Init();

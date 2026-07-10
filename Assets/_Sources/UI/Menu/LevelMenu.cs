@@ -10,7 +10,7 @@ namespace _Sources.UI.Menu
     public class LevelMenu : MonoBehaviour
     {
         [SerializeField] private List<LevelMenuItem> _items;
-        [SerializeField] private MapSpawner _mapSpawner;
+        [SerializeField] private LevelSequence _sequence;
 
         public event Action OnStart;
 
@@ -18,26 +18,24 @@ namespace _Sources.UI.Menu
 
         private void OnEnable()
         {
-            foreach (var item in _items)
+            foreach (var item in _items) 
                 item.OnPlay += Play;
-            
-            foreach (var item in _items)
+            foreach (var item in _items) 
                 item.OnAds += PlayAfterAD;
-        
-            _mapSpawner.OnNextLevel += ChangeState;
-            _mapSpawner.IsGotToAd += ChangeStateToIndex;
+            
+            _sequence.OnNextLevelSteps += ChangeState;
+            _sequence.IsGotToAd += ChangeStateToIndex;
         }
 
         private void OnDisable()
         {
-            foreach (var item in _items)
+            foreach (var item in _items) 
                 item.OnPlay -= Play;
-            
-            foreach (var item in _items)
+            foreach (var item in _items) 
                 item.OnAds -= PlayAfterAD;
-        
-            _mapSpawner.OnNextLevel -= ChangeState;
-            _mapSpawner.IsGotToAd -= ChangeStateToIndex;
+
+            _sequence.OnNextLevelSteps -= ChangeState;
+            _sequence.IsGotToAd -= ChangeStateToIndex;
         }
         
         public void Init()
@@ -89,7 +87,7 @@ namespace _Sources.UI.Menu
         
         public void Play(int levelIndex)
         {
-            _mapSpawner.SetCurrentLevelIndex(levelIndex);
+            _sequence.SetCurrentLevelIndex(levelIndex);
             OnStart?.Invoke();
         }
 
@@ -101,9 +99,11 @@ namespace _Sources.UI.Menu
 
         public void ChangeState(int step)
         {
+            CurrentLevelIndex = _sequence.CurrentLevelIndex;
+            
             for (int i = _items.Count - 1; i > 0; i--)
             {
-                if (_items[i].LevelIndex == _mapSpawner.CurrentLevelIndex)
+                if (_items[i].LevelIndex == CurrentLevelIndex)
                 {
                     _items[i].ChangeOpeningType(LevelOpeningType.Open);
                     CurrentLevelIndex = i;
@@ -124,6 +124,7 @@ namespace _Sources.UI.Menu
         public void ChangeStateToIndex(int index, LevelOpeningType openingType)
         {
             _items[index].ChangeOpeningType(openingType);
+            Save(index, openingType);
         }
 
         private void UpdateOpeningTypes()

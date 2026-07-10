@@ -9,8 +9,6 @@ namespace _Sources.UI.Menu
 {
     public class LevelMenuItem : MonoBehaviour
     {
-        [SerializeField] private Image _preview;
-        [SerializeField] private TextMeshProUGUI _infoText;
         [SerializeField] private LevelItemBestTimeShower _bestTimeShower;
     
         [SerializeField] private Button _play;
